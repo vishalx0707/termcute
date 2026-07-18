@@ -1,0 +1,35 @@
+{
+  "slug": "amoled",
+  "name": "AMOLED",
+  "description": "True black, pixels off — vivid color on the void",
+  "scheme": {
+    "name": "TermCute AMOLED",
+    "background": "#000000",
+    "foreground": "#f2f2f2",
+    "cursorColor": "#ffffff",
+    "selectionBackground": "#2b2b2b",
+    "black": "#121212",
+    "red": "#ff3b5c",
+    "green": "#2bff88",
+    "yellow": "#ffd60a",
+    "blue": "#3b82ff",
+    "purple": "#c77dff",
+    "cyan": "#2be4f0",
+    "white": "#e0e0e0",
+    "brightBlack": "#4d4d4d",
+    "brightRed": "#ff7089",
+    "brightGreen": "#6fffae",
+    "brightYellow": "#ffe45c",
+    "brightBlue": "#70a5ff",
+    "brightPurple": "#d9a3ff",
+    "brightCyan": "#6fecf5",
+    "brightWhite": "#ffffff"
+  },
+  "profile": {
+    "opacity": 100,
+    "useAcrylic": false,
+    "cursorShape": "bar",
+    "padding": "8",
+    "backgroundImage": null
+  }
+}

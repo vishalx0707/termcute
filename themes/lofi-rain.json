@@ -1,0 +1,37 @@
+{
+  "slug": "lofi-rain",
+  "name": "Lo-fi Rain",
+  "description": "Rainy city night — warm bokeh through a wet window",
+  "scheme": {
+    "name": "TermCute Lo-fi Rain",
+    "background": "#10100e",
+    "foreground": "#e0d8cc",
+    "cursorColor": "#e8a848",
+    "selectionBackground": "#2e2820",
+    "black": "#1a1816",
+    "red": "#d86860",
+    "green": "#78b888",
+    "yellow": "#d8b060",
+    "blue": "#6898b8",
+    "purple": "#b080a0",
+    "cyan": "#60a8a0",
+    "white": "#c8c0b0",
+    "brightBlack": "#504840",
+    "brightRed": "#f09080",
+    "brightGreen": "#98d0a8",
+    "brightYellow": "#f0cc80",
+    "brightBlue": "#90b8d8",
+    "brightPurple": "#d0a0c0",
+    "brightCyan": "#80c8c0",
+    "brightWhite": "#f0e8dc"
+  },
+  "profile": {
+    "opacity": 98,
+    "useAcrylic": false,
+    "cursorShape": "bar",
+    "padding": "14",
+    "backgroundImage": "@gen:lofi-rain",
+    "backgroundImageOpacity": 1,
+    "backgroundImageStretchMode": "uniformToFill"
+  }
+}

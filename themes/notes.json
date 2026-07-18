@@ -1,0 +1,37 @@
+{
+  "slug": "notes",
+  "name": "Notes",
+  "description": "Ruled notebook paper — blue lines, a red margin, ink-dark text",
+  "scheme": {
+    "name": "TermCute Notes",
+    "background": "#f8f4e9",
+    "foreground": "#33415c",
+    "cursorColor": "#c9485b",
+    "selectionBackground": "#cfe0f2",
+    "black": "#3a4256",
+    "red": "#c9485b",
+    "green": "#3e7d54",
+    "yellow": "#a8720e",
+    "blue": "#33628f",
+    "purple": "#7d4fa0",
+    "cyan": "#257d7d",
+    "white": "#b8ad96",
+    "brightBlack": "#6b7280",
+    "brightRed": "#e05c6e",
+    "brightGreen": "#4f9c6b",
+    "brightYellow": "#c78a1a",
+    "brightBlue": "#4179ad",
+    "brightPurple": "#9668bd",
+    "brightCyan": "#319898",
+    "brightWhite": "#fdfaf1"
+  },
+  "profile": {
+    "opacity": 100,
+    "useAcrylic": false,
+    "cursorShape": "underscore",
+    "padding": "18",
+    "backgroundImage": "@gen:notes",
+    "backgroundImageOpacity": 1,
+    "backgroundImageStretchMode": "uniformToFill"
+  }
+}

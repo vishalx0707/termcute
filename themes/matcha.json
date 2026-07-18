@@ -1,0 +1,35 @@
+{
+  "slug": "matcha",
+  "name": "Matcha",
+  "description": "Green tea and cream — earthy, warm, and calm",
+  "scheme": {
+    "name": "TermCute Matcha",
+    "background": "#1c221b",
+    "foreground": "#e7edde",
+    "cursorColor": "#a3c585",
+    "selectionBackground": "#3a4634",
+    "black": "#2a3128",
+    "red": "#d98e73",
+    "green": "#a3c585",
+    "yellow": "#e4d08a",
+    "blue": "#7fa8b8",
+    "purple": "#b39cc0",
+    "cyan": "#8fbcab",
+    "white": "#d5dcc9",
+    "brightBlack": "#5c6857",
+    "brightRed": "#e6ab96",
+    "brightGreen": "#bcd8a4",
+    "brightYellow": "#eeddab",
+    "brightBlue": "#a1c2cf",
+    "brightPurple": "#c9b8d3",
+    "brightCyan": "#accfc2",
+    "brightWhite": "#f2f6ea"
+  },
+  "profile": {
+    "opacity": 96,
+    "useAcrylic": false,
+    "cursorShape": "bar",
+    "padding": "14",
+    "backgroundImage": null
+  }
+}

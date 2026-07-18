@@ -1,0 +1,37 @@
+{
+  "slug": "nebula",
+  "name": "Nebula",
+  "description": "Deep-space gas clouds — magenta haze and starfield blues",
+  "scheme": {
+    "name": "TermCute Nebula",
+    "background": "#0e0a1a",
+    "foreground": "#e0daf0",
+    "cursorColor": "#d080e8",
+    "selectionBackground": "#28184a",
+    "black": "#16102a",
+    "red": "#e8607a",
+    "green": "#60d4a8",
+    "yellow": "#e8c870",
+    "blue": "#6098e8",
+    "purple": "#c878e4",
+    "cyan": "#58c8d8",
+    "white": "#c0b8d6",
+    "brightBlack": "#4a3e6a",
+    "brightRed": "#f48898",
+    "brightGreen": "#88e4c0",
+    "brightYellow": "#f4dc98",
+    "brightBlue": "#90b8f4",
+    "brightPurple": "#dc9ef0",
+    "brightCyan": "#80dce8",
+    "brightWhite": "#f0eafa"
+  },
+  "profile": {
+    "opacity": 98,
+    "useAcrylic": false,
+    "cursorShape": "filledBox",
+    "padding": "14",
+    "backgroundImage": "@gen:nebula",
+    "backgroundImageOpacity": 1,
+    "backgroundImageStretchMode": "uniformToFill"
+  }
+}

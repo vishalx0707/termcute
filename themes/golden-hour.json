@@ -1,0 +1,37 @@
+{
+  "slug": "golden-hour",
+  "name": "Golden Hour",
+  "description": "Warm sunset glow — amber light bleeding into dusky rose",
+  "scheme": {
+    "name": "TermCute Golden Hour",
+    "background": "#1a1008",
+    "foreground": "#f0e4d0",
+    "cursorColor": "#e8a840",
+    "selectionBackground": "#3a2818",
+    "black": "#221810",
+    "red": "#e0604e",
+    "green": "#80c870",
+    "yellow": "#e8b040",
+    "blue": "#6898c8",
+    "purple": "#c080a8",
+    "cyan": "#60b8a8",
+    "white": "#d8c8b0",
+    "brightBlack": "#5a4838",
+    "brightRed": "#f08870",
+    "brightGreen": "#a0dc90",
+    "brightYellow": "#f4cc68",
+    "brightBlue": "#90b8e0",
+    "brightPurple": "#d8a0c0",
+    "brightCyan": "#88d0c0",
+    "brightWhite": "#f8f0e0"
+  },
+  "profile": {
+    "opacity": 98,
+    "useAcrylic": false,
+    "cursorShape": "bar",
+    "padding": "14",
+    "backgroundImage": "@gen:golden-hour",
+    "backgroundImageOpacity": 1,
+    "backgroundImageStretchMode": "uniformToFill"
+  }
+}

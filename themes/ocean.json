@@ -1,0 +1,35 @@
+{
+  "slug": "ocean",
+  "name": "Ocean",
+  "description": "Deep water light — teal currents over navy depths",
+  "scheme": {
+    "name": "TermCute Ocean",
+    "background": "#0a1b2a",
+    "foreground": "#dcebf5",
+    "cursorColor": "#5ecbe8",
+    "selectionBackground": "#1d3d54",
+    "black": "#14293a",
+    "red": "#f2708a",
+    "green": "#66d9b8",
+    "yellow": "#f0cf87",
+    "blue": "#5aa7e0",
+    "purple": "#9d8ce0",
+    "cyan": "#5ecbe8",
+    "white": "#c3d9e8",
+    "brightBlack": "#40607a",
+    "brightRed": "#f795a8",
+    "brightGreen": "#8fe8cf",
+    "brightYellow": "#f7dfa8",
+    "brightBlue": "#85c1ec",
+    "brightPurple": "#bcafec",
+    "brightCyan": "#8cdcf0",
+    "brightWhite": "#eef6fb"
+  },
+  "profile": {
+    "opacity": 95,
+    "useAcrylic": false,
+    "cursorShape": "bar",
+    "padding": "12",
+    "backgroundImage": null
+  }
+}

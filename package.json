@@ -1,0 +1,33 @@
+{
+  "name": "termcute",
+  "version": "1.0.0",
+  "description": ">_< TERMCUTE — a heavily animated CLI that makes your terminal cute. Themes Windows Terminal with live preview, safe backups, and one-key restore.",
+  "type": "module",
+  "bin": {
+    "termcute": "bin/termcute.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "themes",
+    "assets",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node bin/termcute.js"
+  },
+  "keywords": [
+    "terminal",
+    "theme",
+    "windows-terminal",
+    "tui",
+    "cli",
+    "customization",
+    "sakura",
+    "cute"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,35 @@
+{
+  "slug": "minimal",
+  "name": "Minimal",
+  "description": "Quiet monochrome — muted tones, zero noise",
+  "scheme": {
+    "name": "TermCute Minimal",
+    "background": "#101010",
+    "foreground": "#d6d6d6",
+    "cursorColor": "#d6d6d6",
+    "selectionBackground": "#333333",
+    "black": "#1e1e1e",
+    "red": "#c98a8a",
+    "green": "#9dbd9d",
+    "yellow": "#cdc09a",
+    "blue": "#93a8c0",
+    "purple": "#af9dbd",
+    "cyan": "#96b8b4",
+    "white": "#c2c2c2",
+    "brightBlack": "#555555",
+    "brightRed": "#dba9a9",
+    "brightGreen": "#b9d3b9",
+    "brightYellow": "#ded3b4",
+    "brightBlue": "#b0c2d6",
+    "brightPurple": "#c6b7d1",
+    "brightCyan": "#b2cecb",
+    "brightWhite": "#efefef"
+  },
+  "profile": {
+    "opacity": 100,
+    "useAcrylic": false,
+    "cursorShape": "underscore",
+    "padding": "16",
+    "backgroundImage": null
+  }
+}
