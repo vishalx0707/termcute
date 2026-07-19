@@ -4,6 +4,9 @@ import path from 'node:path';
 import { encodePng } from './png.js';
 import { DESIGNS } from './designs.js';
 import { AURA_SPECS, paintAura } from './aura.js';
+import gifenc from 'gifenc';
+
+const { GIFEncoder, quantize, applyPalette } = gifenc;
 
 /**
  * Wallpapers are generated into %LOCALAPPDATA%\TermCute\wallpapers — a path
@@ -12,7 +15,7 @@ import { AURA_SPECS, paintAura } from './aura.js';
  * bump VERSION when a design changes and stale files are simply left behind.
  */
 
-const VERSION = 3;
+const VERSION = 5; // Bump version for 320x180 GIFs
 
 const W = 1600;
 const H = 900;
@@ -30,26 +33,61 @@ export function allWallpaperNames() {
 
 /**
  * Ensure the named wallpaper exists on disk, painting it if needed.
- * Aura designs use the v2 luminous light-field engine (paintAura);
- * everything else uses the original per-design Canvas painter.
+ * Aura designs use the v3 luminous light-field engine to paint a slow-motion
+ * animated GIF; everything else uses the original static Canvas painter.
  * @param {string} name  a key of DESIGNS or AURA_SPECS
- * @returns {string} absolute path to the PNG
+ * @returns {string} absolute path to the wallpaper file
  */
 export function ensureWallpaper(name) {
-  const file = path.join(WALLPAPER_DIR, `${name}-v${VERSION}.png`);
+  const isAura = AURA_SPECS[name] !== undefined;
+  const ext = isAura ? 'gif' : 'png';
+  const file = path.join(WALLPAPER_DIR, `${name}-v${VERSION}.${ext}`);
   if (fs.existsSync(file)) return file;
 
-  let canvas;
-  if (AURA_SPECS[name]) {
-    canvas = paintAura(AURA_SPECS[name], W, H, 0);
-  } else if (DESIGNS[name]) {
-    canvas = DESIGNS[name]();
+  fs.mkdirSync(WALLPAPER_DIR, { recursive: true });
+
+  if (isAura) {
+    // Generate animated GIF at 320x180 for high performance and soft rendering
+    const w = 320;
+    const h = 180;
+    const numFrames = 30;
+    const delay = 100; // ms per frame (10 fps, 3-second seamless loop)
+    const gif = GIFEncoder();
+    let globalPalette = null;
+
+    for (let f = 0; f < numFrames; f++) {
+      const t = f / numFrames;
+      const canvas = paintAura(AURA_SPECS[name], w, h, t);
+      const bytes = canvas.toBytes();
+
+      // Convert RGB to RGBA for gifenc
+      const rgba = new Uint8Array(w * h * 4);
+      for (let i = 0; i < w * h; i++) {
+        rgba[i * 4] = bytes[i * 3];
+        rgba[i * 4 + 1] = bytes[i * 3 + 1];
+        rgba[i * 4 + 2] = bytes[i * 3 + 2];
+        rgba[i * 4 + 3] = 255;
+      }
+
+      if (!globalPalette) {
+        globalPalette = quantize(rgba, 256);
+      }
+
+      const index = applyPalette(rgba, globalPalette);
+      gif.writeFrame(index, w, h, { palette: globalPalette, delay });
+    }
+
+    gif.finish();
+    fs.writeFileSync(file, Buffer.from(gif.bytes()));
   } else {
-    throw new Error(`Unknown wallpaper "${name}"`);
+    // Generate static PNG
+    if (!DESIGNS[name]) {
+      throw new Error(`Unknown wallpaper "${name}"`);
+    }
+    const canvas = DESIGNS[name]();
+    fs.writeFileSync(file, encodePng(canvas.w, canvas.h, canvas.toBytes()));
   }
 
-  fs.mkdirSync(WALLPAPER_DIR, { recursive: true });
-  fs.writeFileSync(file, encodePng(canvas.w, canvas.h, canvas.toBytes()));
   return file;
 }
 
