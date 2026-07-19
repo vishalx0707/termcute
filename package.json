@@ -19,6 +19,15 @@
   "scripts": {
     "start": "node bin/termcute.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vishalx0707/termcute.git"
+  },
+  "homepage": "https://github.com/vishalx0707/termcute#readme",
+  "bugs": {
+    "url": "https://github.com/vishalx0707/termcute/issues"
+  },
+  "author": "vishalx0707 <vishalxstack@gmail.com>",
   "keywords": [
     "terminal",
     "theme",

@@ -1,5 +1,6 @@
 import { hexToRgb } from '../utils.js';
 import { UI } from '../constants.js';
+import { dropShadow } from './glam.js';
 
 /**
  * Bordered panel with rounded corners. Interiors are filled with opaque
@@ -18,6 +19,7 @@ export function drawPanel(fb, x, y, w, h, { title, borderColor, bgColor } = {}) 
   const border = borderColor ?? hexToRgb(UI.DIMMER);
   const bg = bgColor ?? hexToRgb(UI.BG_PANEL);
 
+  dropShadow(fb, x, y, w, h);
   fb.fillRect(x + 1, y + 1, w - 2, h - 2, ' ', null, bg);
 
   fb.set(x, y, '╭', border, bg);

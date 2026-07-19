@@ -2,6 +2,7 @@ import { hexToRgb } from '../utils.js';
 import { UI } from '../constants.js';
 import { pulseRange } from '../animation/pulse.js';
 import { fadeIn, dim } from '../animation/fade.js';
+import { gradientText, SHADOW_RGB } from './glam.js';
 
 /**
  * Vertical selection menu. Items fade in with staggered tweens on screen
@@ -43,8 +44,13 @@ export class Menu {
    */
   draw(fb, x, y, time) {
     const pink = hexToRgb(UI.PINK);
-    const white = hexToRgb(UI.WHITE);
     const selBg = hexToRgb(UI.SEL_BG);
+
+    // offset shadow layer under the highlight bar (bg only, drawn first so
+    // the next row's label floats over it) — the wordmark's layered look
+    for (let sx = x; sx < x - 1 + this.barWidth + 1; sx++) {
+      fb.tint(sx, y + this.index + 1, undefined, SHADOW_RGB);
+    }
 
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i];
@@ -55,7 +61,7 @@ export class Menu {
         const glow = pulseRange(time, 0.6, 1, 2.4);
         fb.fillRect(x - 1, iy, this.barWidth, 1, ' ', null, selBg);
         fb.drawText(x, iy, '❯', dim(UI.PINK_DEEP, glow), selBg)
-        fb.drawText(x + 2, iy, item.label, fadeIn(white, progress), selBg);
+        gradientText(fb, x + 2, iy, item.label, time, { bg: selBg, reveal: progress });
         if (item.hint) {
           fb.drawText(x + 2 + item.label.length + 2, iy, item.hint, dim(UI.PINK_SOFT, 0.55), selBg);
         }

@@ -2,6 +2,7 @@ import { hexToRgb } from '../utils.js';
 import { UI } from '../constants.js';
 import { dim } from '../animation/fade.js';
 import { pulseRange } from '../animation/pulse.js';
+import { sweep } from './glam.js';
 
 /**
  * The living layer under everything. A designer gradient — deep rose,
@@ -37,7 +38,7 @@ function sample(phase, out) {
   out[2] = a[2] + (b[2] - a[2]) * t;
 }
 
-const GLYPHS = ['·', '˚', '⋆', '✦', '·', '·', '·', '˖'];
+const GLYPHS = ['·', '˚', '⋆', '✦', '·', '◆', '·', '˖', '✧', '·'];
 
 export class Backdrop {
   constructor() {
@@ -127,6 +128,10 @@ function drawFrame(fb, time) {
   fb.set(2, h - 1, '✿', dim(UI.PINK_DEEP, glow * 0.9));
   fb.set(w - 3, h - 1, '✿', dim(UI.PINK_DEEP, glow * 0.9));
 
+  // title chip rides the wordmark's rose→lavender sweep
   const chip = '· ✿ termcute ✿ ·';
-  fb.drawText(Math.floor((w - chip.length) / 2), 0, chip, dim(UI.PINK, 0.7));
+  const cx = Math.floor((w - chip.length) / 2);
+  for (let i = 0; i < chip.length; i++) {
+    fb.set(cx + i, 0, chip[i], dim(sweep(i / (chip.length - 1), time), 0.8));
+  }
 }

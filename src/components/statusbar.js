@@ -1,6 +1,7 @@
 import { hexToRgb } from '../utils.js';
 import { UI } from '../constants.js';
 import { dim } from '../animation/fade.js';
+import { gradientText } from './glam.js';
 
 /**
  * Bottom status bar, drawn on every screen. Left: a small chip naming the
@@ -17,7 +18,12 @@ export function drawStatusBar(fb, ctx, hints) {
     ? 'default'
     : slug === 'custom' ? 'Custom' : (ctx.manager.bySlug(slug)?.name ?? 'Custom');
   const chip = ` ♥ ${name} `;
-  fb.drawText(2, y, chip, hexToRgb(slug === null ? UI.DIM : UI.PINK), hexToRgb(UI.CHIP_BG));
+  if (slug === null) {
+    fb.drawText(2, y, chip, hexToRgb(UI.DIM), hexToRgb(UI.CHIP_BG));
+  } else {
+    // an applied theme wears the wordmark gradient
+    gradientText(fb, 2, y, chip, Date.now() / 1000, { bg: hexToRgb(UI.CHIP_BG) });
+  }
 
   fb.drawText(Math.max(chip.length + 4, Math.floor((fb.width - hints.length) / 2)), y, hints, dim(UI.DIM, 0.95), bg);
 
