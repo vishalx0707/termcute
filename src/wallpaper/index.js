@@ -12,7 +12,7 @@ import { AURA_SPECS, paintAura } from './aura.js';
  * bump VERSION when a design changes and stale files are simply left behind.
  */
 
-const VERSION = 2;
+const VERSION = 3;
 
 const W = 1600;
 const H = 900;
