@@ -1,0 +1,35 @@
+{
+  "slug": "aura-peach",
+  "name": "Aura Peach",
+  "description": "Warm peach and cream morning light, heavy reeded glass.",
+  "scheme": {
+    "name": "TermCute Aura Peach",
+    "background": "#f0e2d2",
+    "foreground": "#33261e",
+    "cursorColor": "#c05a3a",
+    "selectionBackground": "#e0bfa8",
+    "black": "#4a3a30",
+    "white": "#f8f1e8",
+    "brightBlack": "#7a6252",
+    "brightWhite": "#fffdfa",
+    "red": "#9d2533",
+    "brightRed": "#881623",
+    "green": "#259d4d",
+    "brightGreen": "#16883c",
+    "yellow": "#9d7925",
+    "brightYellow": "#886616",
+    "blue": "#254b9d",
+    "brightBlue": "#163a88",
+    "purple": "#69259d",
+    "brightPurple": "#571688",
+    "cyan": "#258f9d",
+    "brightCyan": "#167b88"
+  },
+  "profile": {
+    "opacity": 100,
+    "useAcrylic": false,
+    "cursorShape": "bar",
+    "padding": "20",
+    "backgroundImage": "@gen:aura-peach"
+  }
+}

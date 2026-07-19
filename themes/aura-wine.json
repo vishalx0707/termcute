@@ -1,0 +1,35 @@
+{
+  "slug": "aura-wine",
+  "name": "Aura Wine",
+  "description": "Oxblood and crimson bleeding out of near-black, heavy reeded glass.",
+  "scheme": {
+    "name": "TermCute Aura Wine",
+    "background": "#140609",
+    "foreground": "#f2edee",
+    "cursorColor": "#d4506c",
+    "selectionBackground": "#4e1c28",
+    "black": "#33161d",
+    "white": "#d8ccd0",
+    "brightBlack": "#6b3a46",
+    "brightWhite": "#faf7f8",
+    "red": "#d7707c",
+    "brightRed": "#e9959f",
+    "green": "#70d792",
+    "brightGreen": "#95e9b1",
+    "yellow": "#d7b870",
+    "brightYellow": "#e9d095",
+    "blue": "#7090d7",
+    "brightBlue": "#95b0e9",
+    "purple": "#aa70d7",
+    "brightPurple": "#c595e9",
+    "cyan": "#70cbd7",
+    "brightCyan": "#95e0e9"
+  },
+  "profile": {
+    "opacity": 100,
+    "useAcrylic": false,
+    "cursorShape": "bar",
+    "padding": "20",
+    "backgroundImage": "@gen:aura-wine"
+  }
+}

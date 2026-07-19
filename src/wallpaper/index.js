@@ -3,6 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { encodePng } from './png.js';
 import { DESIGNS } from './designs.js';
+import { AURA_SPECS, paintAura } from './aura.js';
 
 /**
  * Wallpapers are generated into %LOCALAPPDATA%\TermCute\wallpapers — a path
@@ -11,7 +12,10 @@ import { DESIGNS } from './designs.js';
  * bump VERSION when a design changes and stale files are simply left behind.
  */
 
-const VERSION = 1;
+const VERSION = 2;
+
+const W = 1600;
+const H = 900;
 
 export const WALLPAPER_DIR = path.join(
   process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local'),
@@ -19,25 +23,39 @@ export const WALLPAPER_DIR = path.join(
   'wallpapers',
 );
 
+/** All paintable wallpaper names. */
+export function allWallpaperNames() {
+  return [...Object.keys(DESIGNS), ...Object.keys(AURA_SPECS)];
+}
+
 /**
  * Ensure the named wallpaper exists on disk, painting it if needed.
- * @param {string} name  a key of DESIGNS
+ * Aura designs use the v2 luminous light-field engine (paintAura);
+ * everything else uses the original per-design Canvas painter.
+ * @param {string} name  a key of DESIGNS or AURA_SPECS
  * @returns {string} absolute path to the PNG
  */
 export function ensureWallpaper(name) {
-  const design = DESIGNS[name];
-  if (!design) throw new Error(`Unknown wallpaper "${name}"`);
   const file = path.join(WALLPAPER_DIR, `${name}-v${VERSION}.png`);
   if (fs.existsSync(file)) return file;
+
+  let canvas;
+  if (AURA_SPECS[name]) {
+    canvas = paintAura(AURA_SPECS[name], W, H, 0);
+  } else if (DESIGNS[name]) {
+    canvas = DESIGNS[name]();
+  } else {
+    throw new Error(`Unknown wallpaper "${name}"`);
+  }
+
   fs.mkdirSync(WALLPAPER_DIR, { recursive: true });
-  const canvas = design();
   fs.writeFileSync(file, encodePng(canvas.w, canvas.h, canvas.toBytes()));
   return file;
 }
 
 /** Pre-paint every wallpaper (called once at TUI startup so browsing never hitches). */
 export function ensureAllWallpapers() {
-  for (const name of Object.keys(DESIGNS)) {
+  for (const name of allWallpaperNames()) {
     try {
       ensureWallpaper(name);
     } catch { /* a failed paint just means that theme applies without an image */ }

@@ -201,6 +201,45 @@ export class Canvas {
     }
   }
 
+  /** Heavy reeded glass: each flute displaces the image sideways and casts a
+   *  sharp refracted highlight with a soft shadow line beside it. */
+  flute(pitch, strength) {
+    const src = Float32Array.from(this.data);
+    for (let x = 0; x < this.w; x++) {
+      const phase = (x % pitch) / pitch;
+      const off = Math.round(Math.sin(phase * Math.PI * 2) * pitch * 0.33);
+      const sx = Math.min(this.w - 1, Math.max(0, x + off));
+      const bright = Math.exp(-((phase - 0.16) ** 2) / 0.0045);
+      const dark = Math.exp(-((phase - 0.62) ** 2) / 0.018);
+      for (let y = 0; y < this.h; y++) {
+        const di = (y * this.w + x) * 3;
+        const si = (y * this.w + sx) * 3;
+        const r = src[si], g = src[si + 1], b = src[si + 2];
+        const lum = (r + g + b) / 765;
+        const gain = 1 + strength * (bright * (0.35 + 1.05 * lum) - dark * (0.25 + 0.55 * lum));
+        this.data[di] = r * gain;
+        this.data[di + 1] = g * gain;
+        this.data[di + 2] = b * gain;
+      }
+    }
+  }
+
+  /** Vertical fluted glass ridges that vary with underlying brightness. */
+  reeds(pitch, strength) {
+    for (let x = 0; x < this.w; x++) {
+      const phase = (x % pitch) / pitch;
+      const wave = Math.sin(phase * Math.PI * 2);
+      for (let y = 0; y < this.h; y++) {
+        const i = (y * this.w + x) * 3;
+        const luma = 0.299 * this.data[i] + 0.587 * this.data[i + 1] + 0.114 * this.data[i + 2];
+        const effect = strength * (luma / 255) * wave;
+        this.data[i] += effect;
+        this.data[i + 1] += effect;
+        this.data[i + 2] += effect;
+      }
+    }
+  }
+
   toBytes() {
     const out = new Uint8Array(this.w * this.h * 3);
     for (let i = 0; i < out.length; i++) out[i] = clamp(Math.round(this.data[i]), 0, 255);

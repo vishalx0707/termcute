@@ -1,0 +1,35 @@
+{
+  "slug": "aura-porcelain",
+  "name": "Aura Porcelain",
+  "description": "Periwinkle blue and warm cream/sand, airy and light, fluted glass.",
+  "scheme": {
+    "name": "TermCute Aura Porcelain",
+    "background": "#e4e8f1",
+    "foreground": "#1f222e",
+    "cursorColor": "#2947a3",
+    "selectionBackground": "#b8c2e0",
+    "black": "#3d455c",
+    "red": "#9d2533",
+    "green": "#259d4d",
+    "yellow": "#9d7925",
+    "blue": "#254b9d",
+    "purple": "#69259d",
+    "cyan": "#258f9d",
+    "white": "#f0f1f4",
+    "brightBlack": "#5c678a",
+    "brightRed": "#881623",
+    "brightGreen": "#16883c",
+    "brightYellow": "#886616",
+    "brightBlue": "#163a88",
+    "brightPurple": "#571688",
+    "brightCyan": "#167b88",
+    "brightWhite": "#ffffff"
+  },
+  "profile": {
+    "opacity": 100,
+    "useAcrylic": false,
+    "cursorShape": "bar",
+    "padding": "20",
+    "backgroundImage": "@gen:aura-porcelain"
+  }
+}
