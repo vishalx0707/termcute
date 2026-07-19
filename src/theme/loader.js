@@ -12,9 +12,8 @@ import { validateTheme } from './validator.js';
 const ORDER = [
   'liquid-glass', 'anime', 'aurora', 'nebula', 'golden-hour', 'frost', 'lofi-rain',
   'notes', 'romance', 'cyberpunk', 'ocean', 'matcha', 'minimal', 'amoled', 'retro-crt',
-  'aura-ember', 'aura-wine', 'aura-blush', 'aura-cherry', 'aura-crimson', 'aura-violet', 'aura-orchid',
-  'aura-midnight', 'aura-sea', 'aura-porcelain', 'aura-peach', 'aura-chrome', 'aura-gold',
-  'aura-graphite', 'aura-smoke', 'aura-dusk',
+  'aura-ember', 'aura-abyss', 'aura-melancholy', 'aura-euphoria', 'aura-serenity',
+  'aura-solitude', 'aura-nostalgia', 'aura-nebula',
 ];
 
 /** @returns {import('../types.js').Theme[]} */

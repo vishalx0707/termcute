@@ -208,19 +208,11 @@ export function paintAura(spec, w, h, t = 0) {
   return c;
 }
 
-/**
- * 16 redesigned specs. Key differences from v2:
- * - 6–8 lobes each (was 3–5) for richer overlapping light
- * - 7–8 LUT stops with hue rotation through mid-tones
- * - Larger orbit radii (ox/oy 0.04–0.07) for visible motion
- * - Higher warp (0.10–0.14) for organic shapes
- * - Vignette and temperature shift per-design
- */
 export const AURA_SPECS = {
-  /** Crimson → magenta → blush: deep fire breathing through dark glass. */
+  /** A bleeding crimson and dark copper field, resembling embers glowing in a fireplace. */
   'aura-ember': {
-    family: 'reeded', seed: 1207, warp: 0.12, knee: 2.2, pitch: 48, strength: 0.5, grain: 5,
-    vignette: 0.35, tempShift: 0.10,
+    family: 'reeded', seed: 1207, warp: 0.13, knee: 2.3, pitch: 48, strength: 0.55, grain: 6,
+    vignette: 0.38, tempShift: 0.12,
     lobes: [
       { x: 0.88, y: 0.28, r: 0.58, a: 1.35, ox: 0.05, oy: 0.04, ph: 0.0 },
       { x: 1.05, y: 0.62, r: 0.42, a: 1.20, ox: 0.04, oy: 0.03, ph: 1.1 },
@@ -230,74 +222,16 @@ export const AURA_SPECS = {
       { x: 0.30, y: 0.20, r: 0.35, a: 0.50, ox: 0.05, oy: 0.04, ph: 5.8 },
     ],
     lut: [
-      [0, '#120406'], [0.15, '#3a0a12'], [0.30, '#7a1428'],
-      [0.48, '#c4223e'], [0.62, '#e84860'], [0.76, '#ff7a94'],
-      [0.88, '#ffb0c0'], [1, '#ffe8ee'],
+      [0, '#0f0203'], [0.15, '#35050a'], [0.30, '#6c0813'],
+      [0.48, '#a8101d'], [0.62, '#cf252b'], [0.76, '#f05b4a'],
+      [0.88, '#ff966c'], [1, '#ffe3c8'],
     ],
   },
 
-  /** Deep oxblood → burgundy → dusty rose. Darker, moodier than ember. */
-  'aura-wine': {
-    family: 'reeded', seed: 3391, warp: 0.13, knee: 1.95, pitch: 52, strength: 0.58, grain: 5,
-    vignette: 0.38, tempShift: 0.12,
-    lobes: [
-      { x: 0.82, y: 0.24, r: 0.55, a: 1.15, ox: 0.05, oy: 0.04, ph: 0.4 },
-      { x: 1.02, y: 0.68, r: 0.44, a: 1.05, ox: 0.04, oy: 0.03, ph: 1.7 },
-      { x: 0.52, y: 1.08, r: 0.48, a: 0.90, ox: 0.06, oy: 0.04, ph: 2.9 },
-      { x: 0.14, y: 0.28, r: 0.32, a: 0.60, ox: 0.04, oy: 0.04, ph: 4.2 },
-      { x: 0.40, y: 0.50, r: 0.26, a: 0.45, ox: 0.05, oy: 0.05, ph: 5.5 },
-      { x: 0.75, y: 0.90, r: 0.30, a: 0.55, ox: 0.06, oy: 0.03, ph: 0.8 },
-    ],
-    lut: [
-      [0, '#0e0306'], [0.15, '#2a0810'], [0.30, '#52101e'],
-      [0.48, '#7a1830'], [0.62, '#a42240'], [0.76, '#c44060'],
-      [0.88, '#d8788a'], [1, '#e8b0b8'],
-    ],
-  },
-
-  /** Hot pink → magenta → rose petal. High-key, luminous. */
-  'aura-blush': {
-    family: 'reeded', seed: 5122, warp: 0.11, knee: 2.1, pitch: 46, strength: 0.52, grain: 4,
-    vignette: 0.30, tempShift: 0.08,
-    lobes: [
-      { x: 0.70, y: 0.32, r: 0.64, a: 1.10, ox: 0.05, oy: 0.04, ph: 0.2 },
-      { x: 0.28, y: 0.70, r: 0.58, a: 1.00, ox: 0.06, oy: 0.04, ph: 1.5 },
-      { x: 0.92, y: 0.84, r: 0.46, a: 0.90, ox: 0.04, oy: 0.04, ph: 2.8 },
-      { x: 0.08, y: 0.10, r: 0.38, a: 0.60, ox: 0.05, oy: 0.04, ph: 4.0 },
-      { x: 0.55, y: 0.55, r: 0.30, a: 0.50, ox: 0.07, oy: 0.05, ph: 5.3 },
-      { x: 0.85, y: 0.15, r: 0.25, a: 0.40, ox: 0.04, oy: 0.06, ph: 1.0 },
-    ],
-    lut: [
-      [0, '#0c0308'], [0.14, '#2e0816'], [0.28, '#6e1438'],
-      [0.44, '#b02858'], [0.58, '#d84878'], [0.72, '#f07898'],
-      [0.85, '#ffa8c0'], [1, '#ffe0ea'],
-    ],
-  },
-
-  /** Lavender → plum → lilac: deep purple field with rose accent. */
-  'aura-orchid': {
-    family: 'reeded', seed: 7044, warp: 0.12, knee: 2.0, pitch: 50, strength: 0.52, grain: 5,
-    vignette: 0.32, tempShift: 0.06,
-    lobes: [
-      { x: 0.74, y: 0.22, r: 0.54, a: 1.15, ox: 0.05, oy: 0.04, ph: 0.3 },
-      { x: 0.22, y: 0.58, r: 0.50, a: 0.90, ox: 0.06, oy: 0.04, ph: 1.6 },
-      { x: 0.92, y: 0.80, r: 0.42, a: 0.95, ox: 0.04, oy: 0.04, ph: 2.9 },
-      { x: 0.12, y: 0.12, r: 0.34, a: 0.50, ox: 0.05, oy: 0.04, ph: 4.1 },
-      { x: 0.55, y: 0.95, r: 0.38, a: 0.65, ox: 0.06, oy: 0.05, ph: 5.4 },
-      { x: 0.40, y: 0.35, r: 0.24, a: 0.40, ox: 0.07, oy: 0.04, ph: 0.7 },
-      { x: 0.85, y: 0.45, r: 0.28, a: 0.45, ox: 0.04, oy: 0.06, ph: 3.5 },
-    ],
-    lut: [
-      [0, '#0a0510'], [0.14, '#1e0e30'], [0.28, '#3a1a5a'],
-      [0.44, '#5c2e88'], [0.58, '#7e48b0'], [0.72, '#a878d0'],
-      [0.85, '#c8a0e8'], [1, '#ecd8ff'],
-    ],
-  },
-
-  /** Teal → emerald → seafoam: deep ocean light. */
-  'aura-sea': {
-    family: 'reeded', seed: 8810, warp: 0.12, knee: 2.05, pitch: 52, strength: 0.52, grain: 5,
-    vignette: 0.34, tempShift: 0.05,
+  /** Moody deep teal and ink-blue spilling into a cold dark shadow. */
+  'aura-abyss': {
+    family: 'reeded', seed: 8810, warp: 0.14, knee: 2.1, pitch: 52, strength: 0.60, grain: 7,
+    vignette: 0.42, tempShift: 0.06,
     lobes: [
       { x: 0.84, y: 0.30, r: 0.58, a: 1.20, ox: 0.05, oy: 0.04, ph: 0.5 },
       { x: 0.28, y: 0.76, r: 0.52, a: 0.95, ox: 0.06, oy: 0.04, ph: 1.9 },
@@ -307,211 +241,115 @@ export const AURA_SPECS = {
       { x: 0.45, y: 1.05, r: 0.36, a: 0.60, ox: 0.05, oy: 0.04, ph: 0.3 },
     ],
     lut: [
-      [0, '#02080a'], [0.14, '#061e22'], [0.28, '#0c3a3a'],
-      [0.44, '#146858'], [0.58, '#1e9478'], [0.72, '#40c0a0'],
-      [0.85, '#80dcc0'], [1, '#c8f2e4'],
+      [0, '#02070c'], [0.14, '#041624'], [0.28, '#082b3a'],
+      [0.44, '#0e4a54'], [0.58, '#186d6d'], [0.72, '#2b9588'],
+      [0.85, '#56bfa0'], [1, '#b6edd8'],
     ],
   },
 
-  /** LIGHT: periwinkle → cream. Airy, luminous daytime feel. */
-  'aura-porcelain': {
-    family: 'reeded', seed: 10233, warp: 0.10, knee: 2.5, pitch: 48, strength: 0.44, grain: 4,
+  /** A somber blend of muted lavender, dusty mauve, and cold slate gray. */
+  'aura-melancholy': {
+    family: 'reeded', seed: 3391, warp: 0.13, knee: 1.9, pitch: 50, strength: 0.55, grain: 6,
+    vignette: 0.38, tempShift: 0.08,
+    lobes: [
+      { x: 0.82, y: 0.24, r: 0.55, a: 1.15, ox: 0.05, oy: 0.04, ph: 0.4 },
+      { x: 1.02, y: 0.68, r: 0.44, a: 1.05, ox: 0.04, oy: 0.03, ph: 1.7 },
+      { x: 0.52, y: 1.08, r: 0.48, a: 0.90, ox: 0.06, oy: 0.04, ph: 2.9 },
+      { x: 0.14, y: 0.28, r: 0.32, a: 0.60, ox: 0.04, oy: 0.04, ph: 4.2 },
+      { x: 0.40, y: 0.50, r: 0.26, a: 0.45, ox: 0.05, oy: 0.05, ph: 5.5 },
+      { x: 0.75, y: 0.90, r: 0.30, a: 0.55, ox: 0.06, oy: 0.03, ph: 0.8 },
+    ],
+    lut: [
+      [0, '#0c0712'], [0.15, '#1b1226'], [0.30, '#362444'],
+      [0.48, '#583c66'], [0.62, '#7e5788'], [0.76, '#a477aa'],
+      [0.88, '#caa0cc'], [1, '#ecd8ec'],
+    ],
+  },
+
+  /** A high-energy neon pink, electric indigo, and gold glow blending dramatically. */
+  'aura-euphoria': {
+    family: 'reeded', seed: 5122, warp: 0.14, knee: 2.2, pitch: 46, strength: 0.55, grain: 5,
+    vignette: 0.32, tempShift: 0.10,
+    lobes: [
+      { x: 0.70, y: 0.32, r: 0.64, a: 1.10, ox: 0.05, oy: 0.04, ph: 0.2 },
+      { x: 0.28, y: 0.70, r: 0.58, a: 1.00, ox: 0.06, oy: 0.04, ph: 1.5 },
+      { x: 0.92, y: 0.84, r: 0.46, a: 0.90, ox: 0.04, oy: 0.04, ph: 2.8 },
+      { x: 0.08, y: 0.10, r: 0.38, a: 0.60, ox: 0.05, oy: 0.04, ph: 4.0 },
+      { x: 0.55, y: 0.55, r: 0.30, a: 0.50, ox: 0.07, oy: 0.05, ph: 5.3 },
+      { x: 0.85, y: 0.15, r: 0.25, a: 0.40, ox: 0.04, oy: 0.06, ph: 1.0 },
+    ],
+    lut: [
+      [0, '#04020c'], [0.14, '#120524'], [0.28, '#2d0c4a'],
+      [0.44, '#5d137a'], [0.58, '#9d1b9d'], [0.72, '#d13cb2'],
+      [0.85, '#f57cd0'], [1, '#ffcceb'],
+    ],
+  },
+
+  /** Calming sage green, soft sand, and pale sky blue, extremely light and airy. */
+  'aura-serenity': {
+    family: 'reeded', seed: 10233, warp: 0.11, knee: 2.5, pitch: 48, strength: 0.48, grain: 4,
     vignette: 0.22, tempShift: 0.04,
     lobes: [
-      { x: 0.28, y: 0.28, r: 0.70, a: 1.25, ox: 0.04, oy: 0.04, ph: 0.2 },
-      { x: 0.84, y: 0.70, r: 0.66, a: 1.18, ox: 0.04, oy: 0.04, ph: 1.6 },
-      { x: 0.88, y: 0.14, r: 0.46, a: 0.95, ox: 0.05, oy: 0.04, ph: 2.9 },
-      { x: 0.12, y: 0.84, r: 0.48, a: 0.90, ox: 0.04, oy: 0.05, ph: 4.2 },
-      { x: 0.55, y: 0.50, r: 0.35, a: 0.70, ox: 0.06, oy: 0.04, ph: 5.5 },
-      { x: 0.72, y: 0.92, r: 0.30, a: 0.50, ox: 0.05, oy: 0.04, ph: 0.8 },
+      { x: 0.30, y: 0.30, r: 0.72, a: 1.20, ox: 0.04, oy: 0.04, ph: 0.2 },
+      { x: 0.82, y: 0.72, r: 0.68, a: 1.15, ox: 0.04, oy: 0.04, ph: 1.6 },
+      { x: 0.86, y: 0.16, r: 0.48, a: 0.90, ox: 0.05, oy: 0.04, ph: 2.9 },
+      { x: 0.14, y: 0.86, r: 0.50, a: 0.85, ox: 0.04, oy: 0.05, ph: 4.2 },
     ],
     lut: [
-      [0, '#6878a0'], [0.14, '#8090b8'], [0.28, '#98a8cc'],
-      [0.44, '#b0c0dc'], [0.58, '#c8d0e8'], [0.72, '#dce0ee'],
-      [0.85, '#eee8dc'], [1, '#faf4ec'],
+      [0, '#5a6b5c'], [0.15, '#768c78'], [0.30, '#94ab96'],
+      [0.48, '#b2c7b4'], [0.62, '#cce0ce'], [0.76, '#e0eee2'],
+      [0.88, '#eee8dc'], [1, '#FAF7F2'],
     ],
   },
 
-  /** LIGHT: peach → terracotta → cream. Warm morning light. */
-  'aura-peach': {
-    family: 'reeded', seed: 12088, warp: 0.10, knee: 2.5, pitch: 46, strength: 0.44, grain: 4,
-    vignette: 0.25, tempShift: 0.06,
-    lobes: [
-      { x: 0.26, y: 0.26, r: 0.70, a: 1.30, ox: 0.04, oy: 0.04, ph: 0.3 },
-      { x: 0.86, y: 0.38, r: 0.60, a: 1.15, ox: 0.05, oy: 0.04, ph: 1.5 },
-      { x: 0.58, y: 0.94, r: 0.54, a: 1.05, ox: 0.06, oy: 0.04, ph: 2.8 },
-      { x: 0.06, y: 0.86, r: 0.46, a: 0.85, ox: 0.04, oy: 0.05, ph: 4.0 },
-      { x: 0.50, y: 0.45, r: 0.30, a: 0.60, ox: 0.07, oy: 0.05, ph: 5.3 },
-      { x: 0.90, y: 0.80, r: 0.28, a: 0.45, ox: 0.05, oy: 0.04, ph: 1.2 },
-    ],
-    lut: [
-      [0, '#8a6050'], [0.14, '#a87868'], [0.28, '#c89480'],
-      [0.44, '#e0a890'], [0.58, '#f0c0a0'], [0.72, '#f8d4b8'],
-      [0.85, '#fce4cc'], [1, '#fef4e8'],
-    ],
-  },
-
-  /** LIGHT: silver-blue → slate. Cool monochrome with depth. */
-  'aura-chrome': {
-    family: 'reeded', seed: 13901, warp: 0.10, knee: 2.5, pitch: 48, strength: 0.52, grain: 4,
-    vignette: 0.24, tempShift: 0.03,
-    lobes: [
-      { x: 0.64, y: 0.26, r: 0.64, a: 1.30, ox: 0.04, oy: 0.04, ph: 0.4 },
-      { x: 0.18, y: 0.72, r: 0.56, a: 1.10, ox: 0.05, oy: 0.04, ph: 1.7 },
-      { x: 0.92, y: 0.78, r: 0.42, a: 0.90, ox: 0.04, oy: 0.04, ph: 3.0 },
-      { x: 0.10, y: 0.20, r: 0.38, a: 0.65, ox: 0.05, oy: 0.04, ph: 4.3 },
-      { x: 0.50, y: 0.50, r: 0.30, a: 0.50, ox: 0.06, oy: 0.05, ph: 5.6 },
-      { x: 0.78, y: 0.14, r: 0.26, a: 0.40, ox: 0.04, oy: 0.06, ph: 0.9 },
-    ],
-    lut: [
-      [0, '#505868'], [0.14, '#687488'], [0.28, '#808ea4'],
-      [0.44, '#98a8bc'], [0.58, '#b0c0d0'], [0.72, '#c8d4e2'],
-      [0.85, '#dce4ee'], [1, '#f4f8fc'],
-    ],
-  },
-
-  /** Monochrome charcoal → silver: elegant neutral with reeded glass. */
-  'aura-graphite': {
-    family: 'reeded', seed: 15677, warp: 0.12, knee: 2.05, pitch: 50, strength: 0.58, grain: 5,
-    vignette: 0.36, tempShift: 0.04,
-    lobes: [
-      { x: 0.82, y: 0.28, r: 0.58, a: 1.20, ox: 0.05, oy: 0.04, ph: 0.5 },
-      { x: 0.28, y: 0.74, r: 0.52, a: 0.90, ox: 0.06, oy: 0.04, ph: 1.9 },
-      { x: 1.02, y: 0.68, r: 0.40, a: 0.85, ox: 0.04, oy: 0.03, ph: 3.2 },
-      { x: 0.10, y: 0.16, r: 0.32, a: 0.50, ox: 0.05, oy: 0.04, ph: 4.5 },
-      { x: 0.55, y: 0.95, r: 0.34, a: 0.55, ox: 0.06, oy: 0.05, ph: 5.8 },
-      { x: 0.65, y: 0.50, r: 0.24, a: 0.40, ox: 0.07, oy: 0.04, ph: 0.6 },
-    ],
-    lut: [
-      [0, '#08080a'], [0.14, '#1a1a1e'], [0.28, '#303036'],
-      [0.44, '#4e4e56'], [0.58, '#6e6e78'], [0.72, '#9494a0'],
-      [0.85, '#b8b8c2'], [1, '#e0e0e8'],
-    ],
-  },
-
-  /** Solitary deep red on warm-black: cinematic, isolated. Heavy grain. */
-  'aura-crimson': {
-    family: 'grain', seed: 20114, warp: 0.14, knee: 1.95, grain: 8,
-    vignette: 0.40, tempShift: 0.14,
-    lobes: [
-      { x: 0.50, y: 0.42, r: 0.60, a: 1.25, ox: 0.06, oy: 0.04, ph: 0.0 },
-      { x: 0.56, y: 0.38, r: 0.28, a: 0.60, ox: 0.07, oy: 0.04, ph: 2.0 },
-      { x: 0.38, y: 0.55, r: 0.22, a: 0.35, ox: 0.05, oy: 0.06, ph: 4.0 },
-      { x: 0.65, y: 0.60, r: 0.34, a: 0.40, ox: 0.06, oy: 0.03, ph: 1.5 },
-      { x: 0.42, y: 0.30, r: 0.18, a: 0.30, ox: 0.04, oy: 0.05, ph: 3.2 },
-    ],
-    lut: [
-      [0, '#100404'], [0.15, '#2a0808'], [0.30, '#580e16'],
-      [0.46, '#8a1822'], [0.60, '#c02030'], [0.74, '#e04848'],
-      [0.86, '#f07870'], [1, '#ffc0b8'],
-    ],
-  },
-
-  /** Purple → indigo → lavender haze. Moody with bright core. */
-  'aura-violet': {
-    family: 'grain', seed: 21990, warp: 0.13, knee: 1.90, grain: 8,
-    vignette: 0.38, tempShift: 0.06,
-    lobes: [
-      { x: 0.28, y: 0.28, r: 0.58, a: 1.20, ox: 0.06, oy: 0.04, ph: 0.0 },
-      { x: 0.68, y: 0.64, r: 0.42, a: 0.50, ox: 0.06, oy: 0.04, ph: 2.4 },
-      { x: 0.35, y: 0.22, r: 0.20, a: 0.45, ox: 0.05, oy: 0.06, ph: 4.2 },
-      { x: 0.80, y: 0.35, r: 0.30, a: 0.35, ox: 0.07, oy: 0.04, ph: 1.3 },
-      { x: 0.15, y: 0.70, r: 0.28, a: 0.30, ox: 0.05, oy: 0.05, ph: 3.6 },
-    ],
-    lut: [
-      [0, '#06040e'], [0.15, '#140e28'], [0.30, '#281850'],
-      [0.46, '#442e80'], [0.60, '#6244b8'], [0.74, '#8868d8'],
-      [0.86, '#aa90ee'], [1, '#d8c8ff'],
-    ],
-  },
-
-  /** Cherry red with a pink echo. Two-lobe structure, cinematic grain. */
-  'aura-cherry': {
-    family: 'grain', seed: 23771, warp: 0.13, knee: 1.95, grain: 8,
-    vignette: 0.38, tempShift: 0.12,
-    lobes: [
-      { x: 0.32, y: 0.30, r: 0.56, a: 1.20, ox: 0.06, oy: 0.04, ph: 0.0 },
-      { x: 0.78, y: 0.70, r: 0.40, a: 0.60, ox: 0.06, oy: 0.04, ph: 2.6 },
-      { x: 0.28, y: 0.25, r: 0.18, a: 0.50, ox: 0.05, oy: 0.06, ph: 4.5 },
-      { x: 0.50, y: 0.50, r: 0.30, a: 0.30, ox: 0.07, oy: 0.04, ph: 1.8 },
-      { x: 0.85, y: 0.25, r: 0.24, a: 0.25, ox: 0.05, oy: 0.05, ph: 3.4 },
-    ],
-    lut: [
-      [0, '#0a0306'], [0.15, '#200810'], [0.30, '#4e1020'],
-      [0.46, '#841838'], [0.60, '#b82848'], [0.74, '#e04868'],
-      [0.86, '#f08098'], [1, '#ffc0d0'],
-    ],
-  },
-
-  /** Indigo → deep blue → pale ice. Night sky depth. */
-  'aura-midnight': {
-    family: 'grain', seed: 25508, warp: 0.13, knee: 1.95, grain: 9,
-    vignette: 0.36, tempShift: 0.05,
+  /** A quiet, dark midnight blue field with a single warm amber glow. */
+  'aura-solitude': {
+    family: 'grain', seed: 25508, warp: 0.14, knee: 1.95, grain: 9,
+    vignette: 0.40, tempShift: 0.12,
     lobes: [
       { x: 0.28, y: 0.22, r: 0.56, a: 1.20, ox: 0.06, oy: 0.04, ph: 0.0 },
       { x: 0.24, y: 0.18, r: 0.20, a: 0.60, ox: 0.07, oy: 0.04, ph: 1.4 },
-      { x: 0.76, y: 0.70, r: 0.38, a: 0.40, ox: 0.06, oy: 0.04, ph: 3.0 },
+      { x: 0.78, y: 0.72, r: 0.40, a: 0.45, ox: 0.06, oy: 0.04, ph: 3.0 },
       { x: 0.50, y: 0.45, r: 0.28, a: 0.35, ox: 0.05, oy: 0.06, ph: 4.6 },
-      { x: 0.85, y: 0.20, r: 0.22, a: 0.25, ox: 0.04, oy: 0.05, ph: 2.2 },
     ],
     lut: [
-      [0, '#040508'], [0.15, '#0a1020'], [0.30, '#141e48'],
-      [0.46, '#223478'], [0.60, '#3450a8'], [0.74, '#5878cc'],
-      [0.86, '#88a4e4'], [1, '#c8d8f8'],
+      [0, '#020308'], [0.15, '#060a16'], [0.30, '#10172e'],
+      [0.46, '#222f54'], [0.60, '#424f7e'], [0.74, '#6a7bad'],
+      [0.86, '#9cb0d8'], [1, '#d5e3fc'],
     ],
   },
 
-  /** Warm amber → gold → pale cream. Low in frame, heavy grain. */
-  'aura-gold': {
-    family: 'grain', seed: 27340, warp: 0.13, knee: 1.95, grain: 8,
-    vignette: 0.38, tempShift: 0.14,
+  /** Warm terracotta, vintage olive green, and sepia, mimicking faded film print. */
+  'aura-nostalgia': {
+    family: 'grain', seed: 27340, warp: 0.13, knee: 2.0, grain: 8,
+    vignette: 0.38, tempShift: 0.10,
     lobes: [
       { x: 0.48, y: 0.96, r: 0.64, a: 1.25, ox: 0.06, oy: 0.04, ph: 0.0 },
       { x: 0.52, y: 1.08, r: 0.32, a: 0.65, ox: 0.07, oy: 0.03, ph: 2.2 },
       { x: 0.35, y: 0.78, r: 0.28, a: 0.40, ox: 0.05, oy: 0.06, ph: 4.0 },
       { x: 0.70, y: 0.85, r: 0.30, a: 0.45, ox: 0.06, oy: 0.04, ph: 1.5 },
-      { x: 0.50, y: 0.60, r: 0.24, a: 0.25, ox: 0.05, oy: 0.05, ph: 3.3 },
     ],
     lut: [
-      [0, '#0a0804'], [0.15, '#1e1408'], [0.30, '#402a0e'],
-      [0.46, '#6e4818'], [0.60, '#a87020'], [0.74, '#d09838'],
-      [0.86, '#e8c068'], [1, '#f8e8b8'],
+      [0, '#120a06'], [0.15, '#2e1c12'], [0.30, '#543625'],
+      [0.46, '#7e543e'], [0.60, '#a8775d'], [0.74, '#cc9e82'],
+      [0.86, '#eec8af'], [1, '#FAF0E6'],
     ],
   },
 
-  /** Warm smoke → grey → cream. Elegant monochrome, heavy grain. */
-  'aura-smoke': {
-    family: 'grain', seed: 29187, warp: 0.13, knee: 1.90, grain: 9,
-    vignette: 0.36, tempShift: 0.06,
-    lobes: [
-      { x: 0.60, y: 0.20, r: 0.58, a: 1.10, ox: 0.06, oy: 0.04, ph: 0.0 },
-      { x: 0.66, y: 0.14, r: 0.24, a: 0.50, ox: 0.07, oy: 0.04, ph: 1.6 },
-      { x: 0.20, y: 0.76, r: 0.42, a: 0.40, ox: 0.06, oy: 0.04, ph: 3.2 },
-      { x: 0.80, y: 0.55, r: 0.30, a: 0.35, ox: 0.05, oy: 0.06, ph: 4.8 },
-      { x: 0.40, y: 0.40, r: 0.24, a: 0.25, ox: 0.05, oy: 0.05, ph: 2.4 },
-    ],
-    lut: [
-      [0, '#080808'], [0.15, '#181614'], [0.30, '#302c28'],
-      [0.46, '#504a44'], [0.60, '#706860'], [0.74, '#988e84'],
-      [0.86, '#b8b0a4'], [1, '#e8e0d4'],
-    ],
-  },
-
-  /** Dusty rose + cool slate: muted, dim, cinematic dusk. */
-  'aura-dusk': {
-    family: 'grain', seed: 30952, warp: 0.14, knee: 1.75, grain: 10,
+  /** Swirling violet, electric cyan, and cosmic magenta low in frame, cinematic grain. */
+  'aura-nebula': {
+    family: 'grain', seed: 21990, warp: 0.14, knee: 1.95, grain: 8,
     vignette: 0.40, tempShift: 0.08,
     lobes: [
-      { x: 0.28, y: 0.28, r: 0.58, a: 0.85, ox: 0.06, oy: 0.04, ph: 0.0 },
-      { x: 0.70, y: 0.64, r: 0.54, a: 0.60, ox: 0.06, oy: 0.04, ph: 2.5 },
-      { x: 0.50, y: 0.90, r: 0.32, a: 0.40, ox: 0.05, oy: 0.06, ph: 4.2 },
-      { x: 0.85, y: 0.20, r: 0.28, a: 0.30, ox: 0.07, oy: 0.04, ph: 1.3 },
-      { x: 0.15, y: 0.60, r: 0.24, a: 0.25, ox: 0.05, oy: 0.05, ph: 3.8 },
+      { x: 0.28, y: 0.28, r: 0.58, a: 1.20, ox: 0.06, oy: 0.04, ph: 0.0 },
+      { x: 0.68, y: 0.64, r: 0.42, a: 0.50, ox: 0.06, oy: 0.04, ph: 2.4 },
+      { x: 0.35, y: 0.22, r: 0.20, a: 0.45, ox: 0.05, oy: 0.06, ph: 4.2 },
+      { x: 0.80, y: 0.35, r: 0.30, a: 0.35, ox: 0.07, oy: 0.04, ph: 1.3 },
     ],
     lut: [
-      [0, '#060508'], [0.15, '#141018'], [0.30, '#2e2030'],
-      [0.46, '#4a3448'], [0.60, '#685060'], [0.74, '#887078'],
-      [0.86, '#a89098'], [1, '#d0c0c4'],
+      [0, '#04020a'], [0.15, '#100624'], [0.30, '#260e4a'],
+      [0.46, '#4d1c80'], [0.60, '#7c33b8'], [0.74, '#b155d8'],
+      [0.86, '#e08df0'], [1, '#fbf2ff'],
     ],
   },
 };

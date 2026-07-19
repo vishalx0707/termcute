@@ -1,0 +1,35 @@
+{
+  "slug": "aura-nostalgia",
+  "name": "Aura Nostalgia",
+  "description": "Warm terracotta, vintage olive green, and sepia, mimicking faded film print.",
+  "scheme": {
+    "name": "TermCute Aura Nostalgia",
+    "background": "#120a06",
+    "foreground": "#FAF0E6",
+    "cursorColor": "#a8775d",
+    "selectionBackground": "#543625",
+    "black": "#120a06",
+    "red": "#a83e3e",
+    "green": "#7ea85d",
+    "yellow": "#cc9e82",
+    "blue": "#543625",
+    "purple": "#7e543e",
+    "cyan": "#eec8af",
+    "white": "#FAF0E6",
+    "brightBlack": "#543625",
+    "brightRed": "#cf5d5d",
+    "brightGreen": "#a8cc82",
+    "brightYellow": "#eec8af",
+    "brightBlue": "#a8775d",
+    "brightPurple": "#cc9e82",
+    "brightCyan": "#FAF0E6",
+    "brightWhite": "#ffffff"
+  },
+  "profile": {
+    "opacity": 100,
+    "useAcrylic": false,
+    "cursorShape": "bar",
+    "padding": "20",
+    "backgroundImage": "@gen:aura-nostalgia"
+  }
+}

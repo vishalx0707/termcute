@@ -1,0 +1,35 @@
+{
+  "slug": "aura-euphoria",
+  "name": "Aura Euphoria",
+  "description": "A high-energy neon pink, electric indigo, and gold glow blending dramatically.",
+  "scheme": {
+    "name": "TermCute Aura Euphoria",
+    "background": "#04020c",
+    "foreground": "#ffcceb",
+    "cursorColor": "#d13cb2",
+    "selectionBackground": "#2d0c4a",
+    "black": "#04020c",
+    "red": "#ff1493",
+    "green": "#14ff93",
+    "yellow": "#ffb314",
+    "blue": "#2d0c4a",
+    "purple": "#9d1b9d",
+    "cyan": "#f57cd0",
+    "white": "#ffcceb",
+    "brightBlack": "#2d0c4a",
+    "brightRed": "#ff66b2",
+    "brightGreen": "#66ffb2",
+    "brightYellow": "#ffe066",
+    "brightBlue": "#5d137a",
+    "brightPurple": "#d13cb2",
+    "brightCyan": "#ffcceb",
+    "brightWhite": "#ffffff"
+  },
+  "profile": {
+    "opacity": 100,
+    "useAcrylic": false,
+    "cursorShape": "bar",
+    "padding": "20",
+    "backgroundImage": "@gen:aura-euphoria"
+  }
+}

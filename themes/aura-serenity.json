@@ -1,0 +1,35 @@
+{
+  "slug": "aura-serenity",
+  "name": "Aura Serenity",
+  "description": "Calming sage green, soft sand, and pale sky blue, extremely light and airy.",
+  "scheme": {
+    "name": "TermCute Aura Serenity",
+    "background": "#FAF7F2",
+    "foreground": "#5a6b5c",
+    "cursorColor": "#768c78",
+    "selectionBackground": "#e0eee2",
+    "black": "#FAF7F2",
+    "red": "#ab5a6b",
+    "green": "#768c78",
+    "yellow": "#eee8dc",
+    "blue": "#94ab96",
+    "purple": "#b2c7b4",
+    "cyan": "#cce0ce",
+    "white": "#5a6b5c",
+    "brightBlack": "#e0eee2",
+    "brightRed": "#cf768c",
+    "brightGreen": "#94ab96",
+    "brightYellow": "#f5efe0",
+    "brightBlue": "#b2c7b4",
+    "brightPurple": "#cce0ce",
+    "brightCyan": "#e0eee2",
+    "brightWhite": "#303a30"
+  },
+  "profile": {
+    "opacity": 100,
+    "useAcrylic": false,
+    "cursorShape": "bar",
+    "padding": "20",
+    "backgroundImage": "@gen:aura-serenity"
+  }
+}
