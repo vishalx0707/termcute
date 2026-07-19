@@ -1,0 +1,37 @@
+{
+  "slug": "retro-pipboy",
+  "name": "Retro Pip-Boy",
+  "description": "Fallout Pip-Boy terminal — radioactive green phosphors",
+  "scheme": {
+    "name": "TermCute Retro Pip-Boy",
+    "background": "#041808",
+    "foreground": "#00ff66",
+    "cursorColor": "#00ff66",
+    "selectionBackground": "#053d16",
+    "black": "#0a2610",
+    "red": "#33ff66",
+    "green": "#00ff66",
+    "yellow": "#85ff9c",
+    "blue": "#1eff8a",
+    "purple": "#5cffa5",
+    "cyan": "#33ff99",
+    "white": "#a8ffd0",
+    "brightBlack": "#10401b",
+    "brightRed": "#66ffa2",
+    "brightGreen": "#5cff9a",
+    "brightYellow": "#a3ffbc",
+    "brightBlue": "#5cf0a3",
+    "brightPurple": "#8effbe",
+    "brightCyan": "#70ffd4",
+    "brightWhite": "#ffffff"
+  },
+  "profile": {
+    "opacity": 100,
+    "useAcrylic": false,
+    "cursorShape": "vintage",
+    "padding": "18",
+    "font": { "face": "Cascadia Mono" },
+    "retroEffect": true,
+    "backgroundImage": null
+  }
+}

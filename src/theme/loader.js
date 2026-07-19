@@ -10,10 +10,10 @@ import { validateTheme } from './validator.js';
  */
 
 const ORDER = [
-  'liquid-glass', 'anime', 'aurora', 'nebula', 'golden-hour', 'frost', 'lofi-rain',
-  'notes', 'romance', 'cyberpunk', 'ocean', 'matcha', 'minimal', 'amoled', 'retro-crt',
-  'aura-ember', 'aura-abyss', 'aura-melancholy', 'aura-euphoria', 'aura-serenity',
-  'aura-solitude', 'aura-nostalgia', 'aura-nebula',
+  'liquid-glass', 'lofi-rain', 'notes', 'romance', 'cyberpunk', 'ocean', 'matcha',
+  'minimal', 'amoled', 'retro-crt', 'retro-amber', 'retro-commodore', 'retro-pipboy',
+  'retro-cyberpunk', 'aura-ember', 'aura-abyss', 'aura-melancholy', 'aura-euphoria',
+  'aura-serenity', 'aura-solitude', 'aura-nostalgia', 'aura-nebula',
 ];
 
 /** @returns {import('../types.js').Theme[]} */

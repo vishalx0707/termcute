@@ -1,0 +1,37 @@
+{
+  "slug": "retro-commodore",
+  "name": "Retro Commodore",
+  "description": "Commodore 64 console — classic 80s blue screen scanlines",
+  "scheme": {
+    "name": "TermCute Retro Commodore",
+    "background": "#3a3ade",
+    "foreground": "#a2a2ff",
+    "cursorColor": "#a2a2ff",
+    "selectionBackground": "#1c1c8a",
+    "black": "#000000",
+    "red": "#e05050",
+    "green": "#50e050",
+    "yellow": "#e0e050",
+    "blue": "#3a3ade",
+    "purple": "#e050e0",
+    "cyan": "#50e0e0",
+    "white": "#ffffff",
+    "brightBlack": "#555555",
+    "brightRed": "#ff8080",
+    "brightGreen": "#80ff80",
+    "brightYellow": "#ffff80",
+    "brightBlue": "#7070ff",
+    "brightPurple": "#ff80ff",
+    "brightCyan": "#80ffff",
+    "brightWhite": "#ffffff"
+  },
+  "profile": {
+    "opacity": 100,
+    "useAcrylic": false,
+    "cursorShape": "vintage",
+    "padding": "18",
+    "font": { "face": "Cascadia Mono" },
+    "retroEffect": true,
+    "backgroundImage": null
+  }
+}
