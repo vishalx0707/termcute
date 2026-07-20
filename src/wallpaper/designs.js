@@ -30,118 +30,112 @@ export const DESIGNS = {
     return c;
   },
 
-  /** Cool frosted glass — light streaks and floating glass bubbles. */
+  /**
+   * Apple-style Liquid Glass — layered iridescent refraction pools, specular
+   * caustics, and frosted depth. Designed to sit behind Windows Terminal's
+   * acrylic blur at ~50 % opacity, creating the illusion of looking through
+   * a curved, luminous glass surface.
+   *
+   * Key techniques:
+   * 1. Large, overlapping soft color pools (blobs at very low alpha) simulate
+   *    light refracting through curved glass — each pool is a different hue
+   *    so the overlap creates natural iridescence.
+   * 2. Bright specular caustic spots with wider glow halos mimic concentrated
+   *    light hitting the rim of a glass element.
+   * 3. Translucent rings suggest the curved edges of refractive surfaces.
+   * 4. Subtle diagonal light streaks add directionality (as if lit from above-left).
+   * 5. Fine grain prevents banding and adds a tactile "frosted" texture.
+   * 6. Gentle vignette focuses the eye toward the center.
+   */
   'liquid-glass'() {
     const c = new Canvas(W, H);
-    const rand = Canvas.rng(1049);
-    c.vGradient([[0, '#0e1620'], [0.55, '#121c29'], [1, '#0a0f16']]);
-    for (let i = 0; i < 6; i++) {
-      const x = rand() * W;
-      c.line(x, -50, x - H * 0.55, H + 50, 60 + rand() * 90, '#9cc8e8', 0.035 + rand() * 0.03);
-    }
-    for (let i = 0; i < 9; i++) {
-      const x = rand() * W;
-      const y = rand() * H;
-      const r = 50 + rand() * 140;
-      c.blob(x, y, r, '#7bd4ff', 0.03 + rand() * 0.03);
-      c.ring(x, y, r, r * 0.16, i % 2 ? '#b49cff' : '#a8dcff', 0.10 + rand() * 0.08);
-    }
-    for (let i = 0; i < 60; i++) c.blob(rand() * W, rand() * H, 1.5 + rand() * 2.5, '#dceeff', 0.15 + rand() * 0.2);
-    c.vignette(0.3);
-    return c;
-  },
+    const rand = Canvas.rng(2026);
 
-  /** Synthwave horizon — neon sun, scanlines, perspective grid. */
-  cyberpunk() {
-    const c = new Canvas(W, H);
-    const rand = Canvas.rng(2077);
-    c.vGradient([[0, '#150826'], [0.5, '#1e0b33'], [0.62, '#3a1245'], [1, '#12061f']]);
-    const hy = H * 0.62;
-    const cx = W / 2;
+    // ── deep blue-black base with subtle cool shift ──────────────────
+    c.vGradient([
+      [0,    '#080c16'],
+      [0.25, '#0a1020'],
+      [0.55, '#0c1428'],
+      [0.80, '#0a1020'],
+      [1,    '#060a12'],
+    ]);
 
-    for (let i = 0; i < 90; i++) {
-      const y = rand() * hy * 0.9;
-      c.blob(rand() * W, y, 1 + rand() * 2, i % 3 ? '#e8d8ff' : '#7bfff2', 0.25 + rand() * 0.35);
+    // ── primary refraction pools — large, soft, overlapping ─────────
+    // These are the heart of the liquid glass look: imagine light passing
+    // through a thick curved glass lens and pooling into soft color zones.
+    const pools = [
+      { x: 0.22, y: 0.30, r: 400, col: '#2a6aff', a: 0.050 },  // deep sapphire
+      { x: 0.75, y: 0.25, r: 350, col: '#7c5cff', a: 0.042 },  // violet
+      { x: 0.50, y: 0.68, r: 380, col: '#4a90ff', a: 0.044 },  // sky blue
+      { x: 0.12, y: 0.78, r: 300, col: '#9070ff', a: 0.036 },  // lavender
+      { x: 0.88, y: 0.60, r: 280, col: '#ff6ea0', a: 0.028 },  // warm rose accent
+      { x: 0.38, y: 0.15, r: 260, col: '#50d0e0', a: 0.032 },  // cyan shimmer
+      { x: 0.65, y: 0.48, r: 240, col: '#6080ff', a: 0.030 },  // mid-blue depth layer
+    ];
+    for (const p of pools) {
+      c.blob(p.x * W, p.y * H, p.r, p.col, p.a);
     }
 
-    // neon sun with scanline gaps
-    const sunR = H * 0.2;
-    for (let y = Math.floor(hy - sunR); y < hy; y++) {
-      const t = (hy - y) / sunR;
-      if (t > 1) continue;
-      const gap = Math.floor((1 - t) * 9);
-      if (gap > 1 && y % (gap + 3) < Math.min(gap, 4)) continue;
-      const half = Math.sqrt(1 - t * t) * sunR;
-      const col = [255, 45 + t * 170, 130 + t * (-10)];
-      for (let x = Math.floor(cx - half); x <= cx + half; x++) c.blend(x, y, col, 0.85);
-    }
-    c.blob(cx, hy - sunR * 0.4, sunR * 1.7, '#ff2d95', 0.16);
-    c.hLine(hy, 3, '#ff5db8', 0.5);
-
-    // perspective grid below the horizon
-    for (let i = -14; i <= 14; i++) {
-      c.line(cx + i * 26, hy, cx + i * 230, H + 40, 1.6, i % 2 ? '#ff2d95' : '#29e5ff', 0.3);
-    }
-    for (let k = 1; k <= 9; k++) {
-      const y = hy + (H - hy) * (k * k) / 81;
-      c.hLine(y, 1.4, '#ff2d95', 0.35);
-    }
-    c.vignette(0.28);
-    return c;
-  },
-
-  /** Candlelit dark red — rose petals, soft glow, tiny hearts. */
-  romance() {
-    const c = new Canvas(W, H);
-    const rand = Canvas.rng(143);
-    c.radial(W * 0.5, H * 0.42, W * 0.75, '#230a11', '#0c0305');
+    // ── secondary depth blobs — smaller, scattered, add layered iridescence
+    const depthColors = ['#5090ff', '#7c5cff', '#9070ff', '#50d0e0', '#ff80b0', '#6aadff',
+                         '#a080ff', '#40c8d0', '#8090ff', '#ff6ea0'];
     for (let i = 0; i < 22; i++) {
-      c.blob(rand() * W, rand() * H, 70 + rand() * 150, i % 2 ? '#ff4d6d' : '#c9184a', 0.035 + rand() * 0.045);
+      c.blob(
+        rand() * W, rand() * H,
+        60 + rand() * 200,
+        depthColors[i % depthColors.length],
+        0.015 + rand() * 0.022,
+      );
     }
-    for (let i = 0; i < 70; i++) {
-      const size = 5 + rand() * 10;
-      const colors = ['#7f1029', '#a11930', '#d61f4a'];
-      c.petal(rand() * W, rand() * H, size, size * 0.6, rand() * Math.PI, colors[i % 3], 0.25 + rand() * 0.25);
-    }
-    for (let i = 0; i < 16; i++) {
-      c.heart(rand() * W, rand() * H, 6 + rand() * 12, i % 2 ? '#d61f4a' : '#ff4d6d', 0.3 + rand() * 0.25);
-    }
-    for (let i = 0; i < 40; i++) c.blob(rand() * W, rand() * H, 1 + rand() * 2, '#ffb3c1', 0.12 + rand() * 0.18);
-    c.vignette(0.4);
-    return c;
-  },
 
-  /** Rainy city night through a wet window — warm bokeh, streaking rain. */
-  'lofi-rain'() {
-    const c = new Canvas(W, H);
-    const rand = Canvas.rng(2216);
-    c.vGradient([[0, '#0d0a1a'], [0.5, '#151026'], [1, '#0b0816']]);
-    // out-of-focus city lights, warm with a few cool accents
-    const lights = ['#ffae5e', '#ff7aa0', '#ffd98a', '#5ad0e8', '#b08ae8', '#ff9a5e'];
-    for (let i = 0; i < 95; i++) {
-      const x = rand() * W;
-      const y = H * (0.32 + rand() * 0.55);
-      const r = 8 + rand() * 60;
-      c.blob(x, y, r, lights[i % 6], 0.09 + rand() * 0.13);
-      if (i % 6 === 0) c.ring(x, y, r, r * 0.2, lights[(i + 1) % 6], 0.12);
-      if (i % 9 === 0) c.blob(x, y, r * 0.35, '#ffe8c8', 0.16);
-    }
-    // rain streaking down the glass
-    for (let i = 0; i < 150; i++) {
+    // ── specular caustics — bright spots where light concentrates ────
+    // These give the "glassy" specular highlight feel.
+    for (let i = 0; i < 16; i++) {
       const x = rand() * W;
       const y = rand() * H;
-      const len = 26 + rand() * 60;
-      c.line(x, y, x - 5, y + len, 1, '#aac8e8', 0.045 + rand() * 0.05);
+      const r = 12 + rand() * 35;
+      // bright white-blue core
+      c.blob(x, y, r, '#d8ecff', 0.07 + rand() * 0.06);
+      // wider soft glow halo
+      c.blob(x, y, r * 2.8, '#6aadff', 0.018 + rand() * 0.014);
     }
-    // droplets clinging to the window, each with a tiny highlight
-    for (let i = 0; i < 60; i++) {
+
+    // ── glass edge rings — curved refractive surface boundaries ─────
+    const ringColors = ['#5090ff', '#7c5cff', '#90c0ff', '#a080ff', '#50d0e0'];
+    for (let i = 0; i < 8; i++) {
       const x = rand() * W;
       const y = rand() * H;
-      const r = 1.6 + rand() * 1.8;
-      c.blob(x, y, r, '#cfe0f0', 0.3);
-      c.blob(x - r * 0.35, y - r * 0.35, r * 0.4, '#ffffff', 0.35);
+      const r = 80 + rand() * 220;
+      c.ring(x, y, r, r * 0.07, ringColors[i % ringColors.length], 0.05 + rand() * 0.04);
     }
-    c.vignette(0.35);
+
+    // ── directional light streaks — lit from upper-left ─────────────
+    for (let i = 0; i < 5; i++) {
+      const x = rand() * W * 0.8;
+      c.line(
+        x, -60,
+        x - H * 0.45, H + 60,
+        70 + rand() * 110,
+        i % 2 ? '#6aadff' : '#9070ff',
+        0.010 + rand() * 0.008,
+      );
+    }
+
+    // ── tiny sparkle highlights ─────────────────────────────────────
+    for (let i = 0; i < 70; i++) {
+      c.blob(rand() * W, rand() * H, 1 + rand() * 3, '#d0e8ff', 0.10 + rand() * 0.22);
+    }
+
+    // ── warm accent flare in the lower-right for color contrast ─────
+    c.blob(W * 0.82, H * 0.72, 180, '#ff6ea0', 0.022);
+    c.blob(W * 0.80, H * 0.70, 90,  '#ffb0d0', 0.035);
+
+    // ── frosted grain texture ───────────────────────────────────────
+    c.grain(2.8, 42);
+
+    // ── gentle vignette ─────────────────────────────────────────────
+    c.vignette(0.22);
+
     return c;
   },
 
@@ -165,4 +159,3 @@ export const DESIGNS = {
   },
 
 };
-

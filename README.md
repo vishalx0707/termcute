@@ -46,17 +46,14 @@ Themes restyle the **whole terminal** — not just the prompt colors. Several sh
 | `nebula` | Deep-space gas clouds, flared stars, a glowing core |
 | `golden-hour` | Sunset over water — silhouetted clouds, sun shimmer |
 | `frost` | Snowfall, crystalline snowflakes, a snow bank at the bottom |
-| `lofi-rain` | Rainy city night — warm bokeh through a wet window |
 | `notes` | Ruled notebook paper — blue lines, red margin, ink-dark text |
-| `romance` | Romantic dark red — candlelight, rose petals, tiny hearts |
-| `cyberpunk` | Synthwave horizon — neon sun, perspective grid, midnight violet |
 | `ocean` | Teal currents over navy depths |
 | `matcha` | Green tea and cream |
 | `minimal` | Quiet monochrome, zero noise |
 | `amoled` | True black, vivid color |
 | `retro-crt` | 1982 green phosphor, vintage cursor + CRT scanline effect |
 
-`liquid-glass` is real transparency (no acrylic blur) — Windows Terminal composites the desktop straight through at 50% opacity. Windows' "Transparency effects" (Personalization → Colors) must be on.
+`liquid-glass` is true acrylic glass transparency — it uses Windows Terminal's native Acrylic blur with the desktop showing through at a highly transparent 20% opacity.
 
 ## CLI
 
