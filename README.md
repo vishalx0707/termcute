@@ -36,34 +36,30 @@ TermCute also clears per-profile `background`/`foreground`/opacity overrides whe
 
 ## Built-in themes
 
-Themes restyle the **whole terminal** — not just the prompt colors. Several ship with full background artwork that TermCute paints procedurally on your machine (zero image dependencies): a sakura dusk sky, a synthwave horizon, candlelit rose petals, ruled notebook paper.
+Themes restyle the **whole terminal** — not just the prompt colors. Current built-ins cover frosted glass, notebook paper, deep-water tones, and multiple retro terminal looks.
 
 | theme | vibe |
 |---|---|
-| `liquid-glass` | True liquid glass — your desktop shows through the terminal |
-| `anime` | Pastel sakura sky — petals and pink bokeh across the background |
-| `aurora` | Northern lights over an arctic mountain ridge |
-| `nebula` | Deep-space gas clouds, flared stars, a glowing core |
-| `golden-hour` | Sunset over water — silhouetted clouds, sun shimmer |
-| `frost` | Snowfall, crystalline snowflakes, a snow bank at the bottom |
-| `lofi-rain` | Rainy city night — warm bokeh through a wet window |
-| `notes` | Ruled notebook paper — blue lines, red margin, ink-dark text |
-| `romance` | Romantic dark red — candlelight, rose petals, tiny hearts |
-| `cyberpunk` | Synthwave horizon — neon sun, perspective grid, midnight violet |
-| `ocean` | Teal currents over navy depths |
-| `matcha` | Green tea and cream |
-| `minimal` | Quiet monochrome, zero noise |
-| `amoled` | True black, vivid color |
-| `retro-crt` | 1982 green phosphor, vintage cursor + CRT scanline effect |
+| `liquid-glass` | Apple-style frosted glass — your desktop glows through the terminal |
+| `notes` | Ruled notebook paper — blue lines, a red margin, ink-dark text |
+| `ocean` | Deep water light — teal currents over navy depths |
+| `matcha` | Green tea and cream — earthy, warm, and calm |
+| `minimal` | Quiet monochrome — muted tones, zero noise |
+| `amoled` | True black, pixels off — vivid color on the void |
+| `retro-crt` | Green phosphor terminal — 1982 called, it looks great |
+| `retro-amber` | Monochrome amber phosphor terminal — glowing amber scanlines |
+| `retro-commodore` | Commodore 64 console — classic 80s blue screen scanlines |
+| `retro-cyberpunk` | Vaporwave HUD console — hot neon magenta glowing scanlines |
+| `retro-pipboy` | Fallout Pip-Boy terminal — radioactive green phosphors |
 
-`liquid-glass` is real transparency (no acrylic blur) — Windows Terminal composites the desktop straight through at 50% opacity. Windows' "Transparency effects" (Personalization → Colors) must be on.
+`liquid-glass` is true acrylic glass transparency — it uses Windows Terminal's native Acrylic blur with the desktop showing through at a highly transparent 20% opacity.
 
 ## CLI
 
 ```bash
 termcute                # the animated picker
 termcute list           # themes with color swatches
-termcute apply anime    # apply straight from the shell
+termcute apply liquid-glass  # apply straight from the shell
 termcute restore        # switch back to your original terminal
 termcute backups        # list safety backups
 ```

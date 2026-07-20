@@ -38,8 +38,5 @@
     "sakura",
     "cute"
   ],
-  "license": "MIT",
-  "dependencies": {
-    "gifenc": "^1.0.3"
-  }
+  "license": "MIT"
 }
