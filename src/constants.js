@@ -11,8 +11,9 @@ export const FPS = 30;
 export const FRAME_MS = 1000 / FPS;
 
 /** Debounce for live-preview writes while scrolling the theme list.
- *  Long enough that fast scrolling doesn't flash every theme in between. */
-export const PREVIEW_DEBOUNCE_MS = 200;
+ *  Windows Terminal visibly redraws when it hot-reloads settings.json, so
+ *  wait until browsing has settled instead of interrupting each arrow move. */
+export const PREVIEW_DEBOUNCE_MS = 550;
 
 /** UI palette (TermCute's own chrome — independent of the themes it applies). */
 export const UI = {
