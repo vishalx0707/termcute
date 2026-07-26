@@ -7,7 +7,10 @@ export const PKG_ROOT = path.resolve(__dirname, '..');
 export const THEMES_DIR = path.join(PKG_ROOT, 'themes');
 export const ASSETS_DIR = path.join(PKG_ROOT, 'assets');
 
-export const FPS = 30;
+// Terminal output is materially more expensive than a browser repaint. 20 fps
+// still looks fluid for the ambient motion while leaving time for input and
+// Windows Terminal to present each frame.
+export const FPS = 20;
 export const FRAME_MS = 1000 / FPS;
 
 /** Debounce for live-preview writes while scrolling the theme list.

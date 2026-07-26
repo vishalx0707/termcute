@@ -25,10 +25,16 @@ export class PreviewSession {
     this.active = true;
   }
 
-  apply(theme) {
+  apply(theme, opts = {}) {
     if (!this.adapter.available()) return;
     if (!this.active) this.begin();
-    this.adapter.applyTheme(theme, { timestampBackup: false });
+    this.adapter.applyTheme(theme, { timestampBackup: false, ...opts });
+  }
+
+  applyBackground(background) {
+    if (!this.adapter.available()) return;
+    if (!this.active) this.begin();
+    this.adapter.applyBackground(background, { timestampBackup: false });
   }
 
   revert() {

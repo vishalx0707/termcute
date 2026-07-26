@@ -1,7 +1,7 @@
 {
   "name": "termcute",
-  "version": "1.0.0",
-  "description": ">_< TERMCUTE — a heavily animated CLI that makes your terminal cute. Themes Windows Terminal with live preview, safe backups, and one-key restore.",
+  "version": "1.0.1",
+  "description": ">_< TERMCUTE — an animated CLI for restoring your original Windows Terminal settings.",
   "type": "module",
   "bin": {
     "termcute": "bin/termcute.js"

@@ -10,6 +10,7 @@ export class Renderer {
   constructor(stream = process.stdout) {
     this.stream = stream;
     this.active = false;
+    this.backpressured = false;
   }
 
   enter() {
@@ -28,32 +29,37 @@ export class Renderer {
 
   /** @param {import('./framebuffer.js').Framebuffer} fb */
   render(fb) {
-    if (!this.active) return;
+    // Never queue stale frames behind a slow terminal. The next loop paints
+    // the newest state, keeping cursor movement responsive under load.
+    if (!this.active || this.backpressured) return;
     // DECSET 2026 (synchronized output): the terminal repaints the frame as
     // one atomic update instead of mid-write — kills flicker/tearing that
     // reads as "the selection shakes". Ignored by terminals without support.
-    let out = `${ESC}[?2026h`;
+    const chunks = [`${ESC}[?2026h`];
     let curFg = undefined;
     let curBg = undefined;
 
     for (let y = 0; y < fb.height; y++) {
-      out += `${ESC}[${y + 1};1H`;
+      chunks.push(`${ESC}[${y + 1};1H`);
       for (let x = 0; x < fb.width; x++) {
         const cell = fb.cells[y * fb.width + x];
         const fgKey = cell.fg ? (cell.fg[0] << 16) | (cell.fg[1] << 8) | cell.fg[2] : -1;
         const bgKey = cell.bg ? (cell.bg[0] << 16) | (cell.bg[1] << 8) | cell.bg[2] : -1;
         if (fgKey !== curFg) {
-          out += fgKey === -1 ? `${ESC}[39m` : `${ESC}[38;2;${cell.fg[0]};${cell.fg[1]};${cell.fg[2]}m`;
+          chunks.push(fgKey === -1 ? `${ESC}[39m` : `${ESC}[38;2;${cell.fg[0]};${cell.fg[1]};${cell.fg[2]}m`);
           curFg = fgKey;
         }
         if (bgKey !== curBg) {
-          out += bgKey === -1 ? `${ESC}[49m` : `${ESC}[48;2;${cell.bg[0]};${cell.bg[1]};${cell.bg[2]}m`;
+          chunks.push(bgKey === -1 ? `${ESC}[49m` : `${ESC}[48;2;${cell.bg[0]};${cell.bg[1]};${cell.bg[2]}m`);
           curBg = bgKey;
         }
-        out += cell.ch;
+        chunks.push(cell.ch);
       }
     }
-    out += `${ESC}[0m${ESC}[?2026l`;
-    this.stream.write(out);
+    chunks.push(`${ESC}[0m${ESC}[?2026l`);
+    if (!this.stream.write(chunks.join(''))) {
+      this.backpressured = true;
+      this.stream.once('drain', () => { this.backpressured = false; });
+    }
   }
 }

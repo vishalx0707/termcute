@@ -1,7 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { spawn } from 'node:child_process';
-import { pathToFileURL } from 'node:url';
 import { PKG_ROOT, UI } from './constants.js';
 import { hexToRgb } from './utils.js';
 import { Loop } from './engine/loop.js';
@@ -20,9 +18,6 @@ import { WTAdapter } from './wt/adapter.js';
 import { PreviewSession } from './wt/preview.js';
 import { ThemeManager } from './theme/manager.js';
 import { createHomeScreen } from './screens/home.js';
-import { createBrowseScreen } from './screens/browse.js';
-import { createCustomScreen } from './screens/custom.js';
-import { createSettingsScreen } from './screens/settings.js';
 import { createRestoreScreen } from './screens/restore.js';
 
 /**
@@ -69,9 +64,6 @@ class App {
 
     this.screens = {
       home: createHomeScreen(ctx),
-      browse: createBrowseScreen(ctx),
-      custom: createCustomScreen(ctx),
-      settings: createSettingsScreen(ctx),
       restore: createRestoreScreen(ctx),
     };
     this.screen = this.screens.home;
@@ -83,7 +75,6 @@ class App {
 
   start() {
     this.installSafetyNets();
-    this.pregenWallpapers();
     this.renderer.enter();
     this.input.start();
     this.resizeWatcher.start();
@@ -113,20 +104,6 @@ class App {
     this.screen.draw(this.fb, time);
     this.drawToast(time);
     this.renderer.render(this.fb);
-  }
-
-  /** Paint theme wallpapers in a detached child so the very first live
-   *  preview never pauses the animation — by the time the user reaches
-   *  Browse, the PNGs are already on disk. */
-  pregenWallpapers() {
-    try {
-      const mod = pathToFileURL(path.join(PKG_ROOT, 'src', 'wallpaper', 'index.js')).href;
-      spawn(
-        process.execPath,
-        ['-e', `import(${JSON.stringify(mod)}).then(m => m.ensureAllWallpapers()).catch(() => {})`],
-        { detached: true, stdio: 'ignore' },
-      ).unref();
-    } catch { /* wallpapers will paint lazily on first apply instead */ }
   }
 
   toast(msg, colorHex = UI.PINK) {

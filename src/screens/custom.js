@@ -1,6 +1,5 @@
-import path from 'node:path';
 import { hexToRgb } from '../utils.js';
-import { UI, CURSOR_SHAPES, ASSETS_DIR } from '../constants.js';
+import { UI, CURSOR_SHAPES } from '../constants.js';
 import { Timeline } from '../animation/timeline.js';
 import { easeOutCubic } from '../animation/easing.js';
 import { stagger } from '../animation/slide.js';
@@ -9,8 +8,6 @@ import { pulseRange } from '../animation/pulse.js';
 import { drawPanel } from '../components/card.js';
 import { drawStatusBar } from '../components/statusbar.js';
 import { generateCustomTheme } from '../theme/generator.js';
-
-const SUGGESTED_WALLPAPER = path.join(ASSETS_DIR, 'wallpapers', 'red_black_dots.jpg');
 
 /**
  * Custom Theme editor. A full 16-color palette is generated live from the
@@ -28,7 +25,6 @@ export function createCustomScreen(ctx) {
   const fields = [
     { id: 'accent', label: 'Accent color', type: 'text', value: '#ff9ec7', hint: 'hex — the palette grows from this' },
     { id: 'font', label: 'Font face', type: 'text', value: '', hint: 'blank = keep current font' },
-    { id: 'image', label: 'Background image', type: 'text', value: '', hint: `blank = none · try ${SUGGESTED_WALLPAPER}` },
     { id: 'opacity', label: 'Opacity', type: 'range', value: 92, min: 30, max: 100, step: 2 },
     { id: 'acrylic', label: 'Acrylic blur', type: 'toggle', value: false },
     { id: 'cursor', label: 'Cursor shape', type: 'cycle', value: 'bar', options: CURSOR_SHAPES },
@@ -46,7 +42,7 @@ export function createCustomScreen(ctx) {
       cursorShape: get('cursor'),
       padding: String(get('padding')),
       fontFace: get('font').trim() || undefined,
-      backgroundImage: get('image').trim() || null,
+      backgroundImage: null,
     });
   };
 
