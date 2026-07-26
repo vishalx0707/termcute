@@ -1,7 +1,7 @@
 {
   "name": "termcute",
   "version": "1.0.1",
-  "description": ">_< TERMCUTE — an animated CLI for restoring your original Windows Terminal settings.",
+  "description": ">_< TERMCUTE — a heavily animated CLI for themes, custom images, and one-key restore for Windows Terminal.",
   "type": "module",
   "bin": {
     "termcute": "bin/termcute.js"

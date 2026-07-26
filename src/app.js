@@ -18,6 +18,9 @@ import { WTAdapter } from './wt/adapter.js';
 import { PreviewSession } from './wt/preview.js';
 import { ThemeManager } from './theme/manager.js';
 import { createHomeScreen } from './screens/home.js';
+import { createCustomImageScreen } from './screens/home-customize.js';
+import { createBrowseScreen } from './screens/browse.js';
+import { createCustomScreen } from './screens/custom.js';
 import { createRestoreScreen } from './screens/restore.js';
 
 /**
@@ -39,6 +42,7 @@ class App {
     this.adapter = new WTAdapter();
     this.preview = new PreviewSession(this.adapter);
     this.manager = new ThemeManager(this.adapter);
+    this.customImage = null;
     this.version = JSON.parse(fs.readFileSync(path.join(PKG_ROOT, 'package.json'), 'utf8')).version;
 
     this.backdrop = new Backdrop();
@@ -53,6 +57,8 @@ class App {
       adapter: this.adapter,
       preview: this.preview,
       manager: this.manager,
+      getCustomImage: () => this.customImage,
+      setCustomImage: (image) => { this.customImage = image; },
       sparkles: this.sparkles,
       version: this.version,
       go: (id) => this.go(id),
@@ -64,6 +70,9 @@ class App {
 
     this.screens = {
       home: createHomeScreen(ctx),
+      'custom-image': createCustomImageScreen(ctx),
+      browse: createBrowseScreen(ctx),
+      custom: createCustomScreen(ctx),
       restore: createRestoreScreen(ctx),
     };
     this.screen = this.screens.home;

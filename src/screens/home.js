@@ -9,7 +9,7 @@ import { drawLogo, LOGO_HEIGHT } from '../components/logo.js';
 import { Menu } from '../components/menu.js';
 import { drawStatusBar } from '../components/statusbar.js';
 
-const TAGLINE = 'restore your terminal defaults ✿';
+const TAGLINE = 'make your terminal cute ✿';
 
 /**
  * Home: the huge animated logo over falling sakura, tagline typing itself
@@ -18,6 +18,9 @@ const TAGLINE = 'restore your terminal defaults ✿';
 export function createHomeScreen(ctx) {
   const timeline = new Timeline();
   const menu = new Menu([
+    { label: 'Browse Themes', action: () => ctx.go('browse') },
+    { label: 'Custom Theme', action: () => ctx.go('custom') },
+    { label: 'Custom Image', action: () => ctx.go('custom-image') },
     { label: 'Restore Defaults', action: () => ctx.go('restore') },
   ]);
 
@@ -74,7 +77,7 @@ function drawFooter(fb, time, ctx) {
   drawStatusBar(fb, ctx, '↑↓ move · ⏎ select · esc quit');
 
   if (!ctx.adapter.available()) {
-    const warn = '⚠ Windows Terminal not detected — restore is unavailable';
+    const warn = '⚠ Windows Terminal not detected — themes can be browsed but not applied';
     fb.drawText(Math.max(1, Math.floor((fb.width - warn.length) / 2)), 1, warn, fadeIn(hexToRgb(UI.GOLD), pulseRange(time, 0.6, 1, 2)));
   }
 }
