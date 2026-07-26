@@ -1,6 +1,6 @@
 {
   "name": "termcute",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": ">_< TERMCUTE — a heavily animated CLI for themes, custom images, and one-key restore for Windows Terminal.",
   "type": "module",
   "bin": {

@@ -8,6 +8,7 @@ import { pulseRange } from '../animation/pulse.js';
 import { drawPanel } from '../components/card.js';
 import { drawStatusBar } from '../components/statusbar.js';
 import { generateCustomTheme } from '../theme/generator.js';
+import { Modal } from '../components/modal.js';
 
 /**
  * Custom Theme editor. A full 16-color palette is generated live from the
@@ -21,6 +22,8 @@ export function createCustomScreen(ctx) {
   let editing = false;
   let editValue = '';
   let debounce = null;
+  let hadBackgroundImage = false;
+  let keepImageModal = null;
 
   const fields = [
     { id: 'accent', label: 'Accent color', type: 'text', value: '#ff9ec7', hint: 'hex — the palette grows from this' },
@@ -51,7 +54,7 @@ export function createCustomScreen(ctx) {
     clearTimeout(debounce);
     debounce = setTimeout(() => {
       try {
-        ctx.preview.apply(buildTheme());
+        ctx.preview.apply(buildTheme(), { preserveBackgroundImage: hadBackgroundImage });
       } catch {
         // invalid accent mid-typing — preview just waits for a valid value
       }
@@ -66,6 +69,8 @@ export function createCustomScreen(ctx) {
       entrances = fields.map((_, i) => timeline.add({ duration: 0.4, delay: stagger(i, 0.05), ease: easeOutCubic }));
       index = 0;
       editing = false;
+      hadBackgroundImage = ctx.adapter.available() && ctx.adapter.hasBackgroundImage();
+      keepImageModal = null;
     },
 
     exit() {
@@ -79,6 +84,18 @@ export function createCustomScreen(ctx) {
 
     onKey(key) {
       const field = fields[index];
+
+      if (keepImageModal) {
+        const action = keepImageModal.onKey(key);
+        if (action === 'confirm') {
+          const preserveBackgroundImage = keepImageModal.index === 0;
+          keepImageModal = null;
+          applyTheme(preserveBackgroundImage);
+        } else if (action === 'cancel') {
+          keepImageModal = null;
+        }
+        return;
+      }
 
       if (editing) {
         if (key.name === 'enter') {
@@ -121,7 +138,20 @@ export function createCustomScreen(ctx) {
           field.value = !field.value;
           schedulePreview();
         } else if (field.type === 'button') {
-          this.apply();
+          if (hadBackgroundImage) {
+            keepImageModal = new Modal({
+              title: 'Keep background image?',
+              lines: [
+                'Your current background image is active.',
+                'Yes keeps it; No lets this theme replace it.',
+              ],
+              options: ['Yes, keep it', 'No, replace it'],
+              defaultIndex: 0,
+            });
+            keepImageModal.open(timeline);
+          } else {
+            applyTheme(false);
+          }
         }
       } else if (key.name === 'esc') {
         try {
@@ -134,20 +164,19 @@ export function createCustomScreen(ctx) {
     },
 
     apply() {
-      clearTimeout(debounce);
-      if (!ctx.adapter.available()) {
-        ctx.toast('Windows Terminal not found — nothing to apply to', UI.GOLD);
-        return;
-      }
-      try {
-        const theme = buildTheme();
-        ctx.preview.apply(theme);
-        ctx.preview.commit();
-        ctx.manager.refreshActive();
-        ctx.sparkles.burst(Math.floor(ctx.fbWidth() * 0.72), Math.floor(ctx.fbHeight() / 2));
-        ctx.toast('Custom theme applied — it\'s yours now ✨', UI.PINK);
-      } catch (err) {
-        ctx.toast(err.message, UI.RED);
+      if (hadBackgroundImage) {
+        keepImageModal = new Modal({
+          title: 'Keep background image?',
+          lines: [
+            'Your current background image is active.',
+            'Yes keeps it; No lets this theme replace it.',
+          ],
+          options: ['Yes, keep it', 'No, replace it'],
+          defaultIndex: 0,
+        });
+        keepImageModal.open(timeline);
+      } else {
+        applyTheme(false);
       }
     },
 
@@ -213,8 +242,28 @@ export function createCustomScreen(ctx) {
         ? 'type value · ⏎ done · esc cancel edit'
         : '↑↓ field · ←→ adjust · ⏎ edit/apply · esc revert & back';
       drawStatusBar(fb, ctx, hints);
+      keepImageModal?.draw(fb, time);
     },
   };
+
+  function applyTheme(preserveBackgroundImage) {
+    clearTimeout(debounce);
+    if (!ctx.adapter.available()) {
+      ctx.toast('Windows Terminal not found — nothing to apply to', UI.GOLD);
+      return;
+    }
+    try {
+      const theme = buildTheme();
+      ctx.preview.apply(theme, { preserveBackgroundImage });
+      ctx.preview.commit();
+      ctx.manager.refreshActive();
+      ctx.sparkles.burst(Math.floor(ctx.fbWidth() * 0.72), Math.floor(ctx.fbHeight() / 2));
+      const imageMessage = preserveBackgroundImage ? ' — background kept' : '';
+      ctx.toast(`Custom theme applied${imageMessage} ✨`, UI.PINK);
+    } catch (err) {
+      ctx.toast(err.message, UI.RED);
+    }
+  }
 }
 
 /** Right-side live palette generated from the current accent value. */

@@ -8,6 +8,7 @@ import { pulseRange } from '../animation/pulse.js';
 import { drawPanel } from '../components/card.js';
 import { drawScrollbar } from '../components/scrollbar.js';
 import { drawStatusBar } from '../components/statusbar.js';
+import { Modal } from '../components/modal.js';
 
 /**
  * Browse Themes. The centerpiece interaction: moving the selection live-
@@ -23,6 +24,8 @@ export function createBrowseScreen(ctx) {
   let cardIn = null;
   let debounce = null;
   let scrollOffset = 0;
+  let hadBackgroundImage = false;
+  let keepImageModal = null;
 
   const themes = () => ctx.manager.themes;
   const listWidth = () => Math.max(...themes().map((t) => t.name.length)) + 9;
@@ -32,7 +35,7 @@ export function createBrowseScreen(ctx) {
     clearTimeout(debounce);
     debounce = setTimeout(() => {
       try {
-        ctx.preview.apply(themes()[index]);
+        ctx.preview.apply(themes()[index], { preserveBackgroundImage: hadBackgroundImage });
       } catch (err) {
         ctx.toast(`Preview failed: ${err.message}`, UI.RED);
       }
@@ -46,6 +49,8 @@ export function createBrowseScreen(ctx) {
       timeline.clear();
       entrances = themes().map((_, i) => timeline.add({ duration: 0.35, delay: stagger(i, 0.04), ease: easeOutCubic }));
       cardIn = timeline.add({ duration: 0.5, delay: 0.1, ease: easeOutCubic });
+      hadBackgroundImage = ctx.adapter.available() && ctx.adapter.hasBackgroundImage();
+      keepImageModal = null;
       const activeIdx = themes().findIndex((t) => t.slug === ctx.manager.activeSlug);
       if (activeIdx >= 0) index = activeIdx;
     },
@@ -61,6 +66,17 @@ export function createBrowseScreen(ctx) {
 
     onKey(key) {
       const list = themes();
+      if (keepImageModal) {
+        const action = keepImageModal.onKey(key);
+        if (action === 'confirm') {
+          const preserveBackgroundImage = keepImageModal.index === 0;
+          keepImageModal = null;
+          applySelectedTheme(preserveBackgroundImage);
+        } else if (action === 'cancel') {
+          keepImageModal = null;
+        }
+        return;
+      }
       if (key.name === 'up' || key.name === 'down') {
         index = (index + (key.name === 'down' ? 1 : -1) + list.length) % list.length;
         schedulePreview();
@@ -72,14 +88,19 @@ export function createBrowseScreen(ctx) {
           ctx.toast('Windows Terminal not found — nothing to apply to', UI.GOLD);
           return;
         }
-        try {
-          ctx.preview.apply(list[index]); // ensure what's on disk is this theme
-          ctx.preview.commit();
-          ctx.manager.refreshActive();
-          ctx.sparkles.burst(Math.floor(ctx.fbWidth() * 0.7), Math.floor(ctx.fbHeight() / 2));
-          ctx.toast(`${list[index].name} applied — it's yours now ✨`, UI.PINK);
-        } catch (err) {
-          ctx.toast(`Apply failed: ${err.message}`, UI.RED);
+        if (hadBackgroundImage) {
+          keepImageModal = new Modal({
+            title: 'Keep background image?',
+            lines: [
+              'Your current background image is active.',
+              'Yes keeps it; No lets this theme replace it.',
+            ],
+            options: ['Yes, keep it', 'No, replace it'],
+            defaultIndex: 0,
+          });
+          keepImageModal.open(timeline);
+        } else {
+          applySelectedTheme(false);
         }
         return;
       }
@@ -139,8 +160,23 @@ export function createBrowseScreen(ctx) {
         ? '↑↓ browse (live!) · ⏎ apply forever · esc revert & back'
         : '↑↓ browse · esc back';
       drawStatusBar(fb, ctx, hints);
+      keepImageModal?.draw(fb, time);
     },
   };
+
+  function applySelectedTheme(preserveBackgroundImage) {
+    clearTimeout(debounce);
+    try {
+      ctx.preview.apply(themes()[index], { preserveBackgroundImage }); // ensure what's on disk is this theme
+      ctx.preview.commit();
+      ctx.manager.refreshActive();
+      ctx.sparkles.burst(Math.floor(ctx.fbWidth() * 0.7), Math.floor(ctx.fbHeight() / 2));
+      const imageMessage = preserveBackgroundImage ? ' — background kept' : '';
+      ctx.toast(`${themes()[index].name} applied${imageMessage} ✨`, UI.PINK);
+    } catch (err) {
+      ctx.toast(`Apply failed: ${err.message}`, UI.RED);
+    }
+  }
 }
 
 function drawHeader(fb, time, ctx) {

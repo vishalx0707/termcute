@@ -103,8 +103,16 @@ export class WTAdapter {
    *   project creates or updates a profile rooted at opts.projectPath.
    * @param {string} [opts.projectPath]
    * @param {{name:string, command:string, matchNames?:string[], matchCommands?:string[]}[]} [opts.agents]
+   * @param {boolean} [opts.preserveBackgroundImage]  Leave an existing image
+   *   (and its opacity/stretch settings) untouched while applying the theme.
    */
-  applyTheme(theme, { timestampBackup = true, scope = 'global', projectPath = process.cwd(), agents = [] } = {}) {
+  applyTheme(theme, {
+    timestampBackup = true,
+    scope = 'global',
+    projectPath = process.cwd(),
+    agents = [],
+    preserveBackgroundImage = false,
+  } = {}) {
     if (!this.available()) throw new Error('Windows Terminal settings.json not found.');
     if (!['global', 'project', 'agents'].includes(scope)) throw new Error(`Unknown apply scope "${scope}".`);
     const raw = this.readRaw();
@@ -121,7 +129,7 @@ export class WTAdapter {
     settings.schemes.push(scheme);
 
     const applyToProfile = (profile) => {
-      for (const key of OWNED_KEYS) delete profile[key];
+      for (const key of ownedKeysForTheme(preserveBackgroundImage)) delete profile[key];
       profile.colorScheme = scheme.name;
       const p = theme.profile || {};
       if (p.opacity !== undefined) profile.opacity = p.opacity;
@@ -130,7 +138,7 @@ export class WTAdapter {
       if (p.padding !== undefined) profile.padding = p.padding;
       if (p.font?.face) profile.font = { ...(profile.font || {}), ...p.font };
       if (p.retroEffect) profile['experimental.retroTerminalEffect'] = true;
-      if (p.backgroundImage) {
+      if (!preserveBackgroundImage && p.backgroundImage) {
         const resolved = resolveImagePath(p.backgroundImage);
         if (resolved) {
           profile.backgroundImage = resolved;
@@ -211,7 +219,7 @@ export class WTAdapter {
       // or opacity silently masks the theme
       for (const profile of settings.profiles.list || []) {
         if (profile && typeof profile === 'object') {
-          for (const key of OWNED_KEYS) delete profile[key];
+          for (const key of ownedKeysForTheme(preserveBackgroundImage)) delete profile[key];
         }
       }
       applyToProfile(settings.profiles.defaults);
@@ -282,6 +290,19 @@ export class WTAdapter {
       return null;
     }
   }
+
+  /** True when the active Windows Terminal configuration contains an image. */
+  hasBackgroundImage() {
+    if (!this.available()) return false;
+    try {
+      const profiles = this.readJson().profiles;
+      if (Array.isArray(profiles)) return profiles.some(profileHasBackgroundImage);
+      return profileHasBackgroundImage(profiles?.defaults)
+        || (profiles?.list || []).some(profileHasBackgroundImage);
+    } catch {
+      return false;
+    }
+  }
 }
 
 /** Synchronous sleep for the rename retry loop — no event-loop yield needed. */
@@ -307,6 +328,17 @@ function resolveImagePath(image) {
 }
 
 const BACKGROUND_KEYS = ['background', 'backgroundImage', 'backgroundImageOpacity', 'backgroundImageStretchMode', 'opacity'];
+const BACKGROUND_IMAGE_KEYS = new Set(['backgroundImage', 'backgroundImageOpacity', 'backgroundImageStretchMode']);
+
+function ownedKeysForTheme(preserveBackgroundImage) {
+  return preserveBackgroundImage
+    ? OWNED_KEYS.filter((key) => !BACKGROUND_IMAGE_KEYS.has(key))
+    : OWNED_KEYS;
+}
+
+function profileHasBackgroundImage(profile) {
+  return typeof profile?.backgroundImage === 'string' && profile.backgroundImage.trim().length > 0;
+}
 
 function clearBackgroundSettings(profile) {
   for (const key of BACKGROUND_KEYS) delete profile[key];

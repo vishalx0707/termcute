@@ -26,7 +26,13 @@ required.
   saved before TermCute first made a change.
 
 Built-in Wallpapers, Agent Themes, and Settings are no longer exposed in the
-CLI or TUI. Their implementation remains in the package source.
+CLI or TUI. Their disabled UI modules are kept locally and are not included in
+the published package.
+
+When applying a theme while a background image is active, the interactive
+picker asks whether to keep it. Choosing **Yes** preserves the image while
+updating the theme's colors and text styling; choosing **No** lets the theme
+replace it.
 
 ## CLI
 
