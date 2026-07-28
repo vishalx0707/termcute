@@ -25,6 +25,10 @@
   <img src="assets/screenshots/termcute-preview-2.png" alt="TermCute themed terminal with live preview" width="90%" />
 </p>
 
+<p align="center">
+  <img src="assets/screenshots/termcute-preview-3.png" alt="TermCute custom wallpaper with transparent terminal" width="90%" />
+</p>
+
 ---
 
 ## ✨ Highlights
