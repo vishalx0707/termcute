@@ -18,15 +18,15 @@
 ---
 
 <p align="center">
-  <img src="assets/screenshots/termcute-preview-1.png" alt="TermCute in action — custom wallpaper theme with transparent terminal" width="90%" />
-</p>
-
-<p align="center">
-  <img src="assets/screenshots/termcute-preview-2.png" alt="TermCute themed terminal with live preview" width="90%" />
-</p>
-
-<p align="center">
   <img src="assets/screenshots/termcute-preview-3.png" alt="TermCute custom wallpaper with transparent terminal" width="90%" />
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/termcute-preview-4.png" alt="TermCute themed terminal showcase" width="90%" />
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/termcute-preview-5.png" alt="TermCute live wallpaper preview" width="90%" />
 </p>
 
 ---
