@@ -1,383 +1,533 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TermCute</title>
-<meta name="description" content=">_< a heavily animated CLI that makes your terminal cute — themes, wallpapers, and one-key restore for Windows Terminal.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=DotGothic16&display=swap">
-<style>
-:root {
-  --bg: #0a1b2a;
-  --bg-deep: #071320;
-  --surface: #0e2338;
-  --line: #1d3d54;
-  --fg: #dcebf5;
-  --muted: #6f93ab;
-  --cyan: #5ecbe8;
-  --pink: #f2708a;
-  --green: #66d9b8;
-  --yellow: #f0cf87;
-  --purple: #9d8ce0;
-  --mono: "JetBrains Mono", "Cascadia Code", ui-monospace, monospace;
-  --pixel: "DotGothic16", var(--mono);
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg-deep);
-  color: var(--fg);
-  font-family: var(--mono);
-  font-size: 15px;
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
-}
-::selection { background: var(--cyan); color: var(--bg-deep); }
-
-.wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-
-/* scanline atmosphere */
-body::before {
-  content: "";
-  position: fixed; inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,.14) 3px 4px);
-  z-index: 5;
-}
-
-a { color: var(--cyan); text-decoration: none; }
-a:hover { text-decoration: underline; }
-:focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; }
-
-/* ---------- top bar ---------- */
-header {
-  position: sticky; top: 0; z-index: 10;
-  background: color-mix(in srgb, var(--bg-deep) 85%, transparent);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--line);
-}
-.topbar {
-  display: flex; align-items: center; gap: 16px;
-  padding: 14px 0;
-  font-size: 13px;
-}
-.brand { color: var(--pink); font-weight: 700; }
-.brand span { color: var(--fg); }
-.topbar nav { margin-left: auto; display: flex; gap: 22px; }
-.topbar nav a { color: var(--muted); }
-.topbar nav a:hover { color: var(--cyan); text-decoration: none; }
-
-/* ---------- hero ---------- */
-.hero { padding: 72px 0 40px; text-align: center; }
-.kaomoji {
-  font-family: var(--pixel);
-  font-size: clamp(28px, 5vw, 44px);
-  color: var(--pink);
-  letter-spacing: .08em;
-  animation: blink 3.2s step-end infinite;
-}
-@keyframes blink { 0%, 100% { opacity: 1; } 92% { opacity: 1; } 95%, 97% { opacity: .35; } }
-h1 {
-  font-size: clamp(30px, 6vw, 52px);
-  font-weight: 700;
-  line-height: 1.15;
-  margin: 14px 0 10px;
-  text-wrap: balance;
-}
-h1 em { font-style: normal; color: var(--cyan); }
-.tagline { color: var(--muted); max-width: 46ch; margin: 0 auto 30px; }
-.tagline code { color: var(--green); }
-
-/* fake terminal window */
-.term {
-  text-align: left;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  box-shadow: 0 24px 60px rgba(0,0,0,.5);
-  overflow: hidden;
-  max-width: 720px;
-  margin: 0 auto;
-}
-.term-bar {
-  display: flex; align-items: center; gap: 8px;
-  padding: 10px 14px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--line);
-}
-.dot { width: 11px; height: 11px; border-radius: 50%; }
-.dot.r { background: var(--pink); } .dot.y { background: var(--yellow); } .dot.g { background: var(--green); }
-.term-bar .title { margin-left: auto; margin-right: auto; color: var(--muted); font-size: 12px; transform: translateX(-30px); }
-.term-body { padding: 18px 20px 22px; font-size: 13.5px; line-height: 1.9; min-height: 168px; }
-.term-body .p { color: var(--green); }
-.term-body .c { color: var(--fg); }
-.term-body .out { color: var(--muted); }
-.term-body .out b { color: var(--cyan); font-weight: 500; }
-.cursor {
-  display: inline-block; width: 8px; height: 1.1em;
-  background: var(--cyan); vertical-align: text-bottom;
-  animation: caret 1s steps(1) infinite;
-}
-@keyframes caret { 50% { opacity: 0; } }
-
-/* ---------- install ---------- */
-.install { display: flex; justify-content: center; padding: 34px 0 10px; }
-.copy {
-  display: flex; align-items: center; gap: 14px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  padding: 12px 18px;
-  font-size: 14px;
-  cursor: pointer;
-  color: var(--fg);
-  font-family: var(--mono);
-  transition: border-color .15s;
-}
-.copy:hover { border-color: var(--cyan); }
-.copy .dollar { color: var(--green); }
-.copy .hint { color: var(--muted); font-size: 11px; }
-.copy.copied .hint { color: var(--green); }
-
-/* ---------- sections ---------- */
-section { padding: 56px 0; }
-.eyebrow {
-  font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
-  color: var(--pink); margin-bottom: 10px;
-}
-h2 { font-size: 24px; margin-bottom: 22px; text-wrap: balance; }
-p.lede { color: var(--muted); max-width: 60ch; }
-
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 26px; }
-.card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  padding: 20px;
-  transition: border-color .15s, transform .15s;
-}
-.card:hover { border-color: var(--cyan); transform: translateY(-2px); }
-.card h3 { font-size: 15px; color: var(--cyan); margin-bottom: 6px; }
-.card h3 .k { color: var(--pink); }
-.card p { font-size: 13px; color: var(--muted); }
-
-/* theme swatches */
-.swatches { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
-.swatch {
-  flex: 1 1 130px; min-width: 130px;
-  border: 1px solid var(--line);
-  padding: 14px;
-  background: var(--surface);
-  cursor: pointer;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--fg);
-  text-align: left;
-  transition: transform .15s, border-color .15s;
-}
-.swatch:hover { transform: translateY(-2px); border-color: var(--cyan); }
-.swatch .chip {
-  height: 34px; margin-bottom: 10px;
-  display: flex; align-items: center; padding: 0 10px;
-  font-size: 11px;
-  border: 1px solid rgba(255,255,255,.08);
-}
-.swatch .nm { color: var(--fg); }
-.swatch .hx { color: var(--muted); }
-
-/* commands */
-.cmds { margin-top: 24px; border: 1px solid var(--line); background: var(--bg); overflow-x: auto; }
-.cmds table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 520px; }
-.cmds td { padding: 12px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
-.cmds tr:last-child td { border-bottom: none; }
-.cmds td:first-child { white-space: nowrap; color: var(--green); }
-.cmds td:last-child { color: var(--muted); }
-
-/* safety strip */
-.safety { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 24px; }
-.safety div { border-left: 2px solid var(--green); padding: 4px 0 4px 16px; font-size: 13px; color: var(--muted); }
-.safety b { color: var(--fg); font-weight: 500; display: block; margin-bottom: 2px; }
-
-/* footer */
-footer { border-top: 1px solid var(--line); padding: 30px 0 44px; font-size: 12.5px; color: var(--muted); display: flex; gap: 20px; flex-wrap: wrap; }
-footer .love { color: var(--pink); }
-
-@media (prefers-reduced-motion: reduce) {
-  .kaomoji, .cursor { animation: none; }
-  html { scroll-behavior: auto; }
-  .card:hover, .swatch:hover { transform: none; }
-}
-@media (max-width: 560px) {
-  .term-bar .title { display: none; }
-  .copy { flex-direction: column; align-items: flex-start; gap: 6px; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TermCute — Make your terminal cute</title>
+  <meta name="description" content="A heavily animated CLI that themes Windows Terminal with live preview, safe backups, and one-key restore. 11 built-in themes. Zero dependencies.">
+  <meta name="keywords" content="terminal, theme, windows-terminal, tui, cli, customization, cute, termcute">
+  <meta name="author" content="vishalx0707">
+  <meta property="og:title" content="TermCute — Make your terminal cute">
+  <meta property="og:description" content="A heavily animated CLI that themes Windows Terminal with live preview, safe backups, and one-key restore.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://github.com/vishalx0707/termcute">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <div class="wrap topbar">
-    <div class="brand">&gt;_&lt; <span>termcute</span></div>
-    <nav>
-      <a href="#features">features</a>
-      <a href="#themes">themes</a>
-      <a href="#cli">cli</a>
-      <a href="https://github.com/vishalx0707/termcute">github</a>
-    </nav>
-  </div>
-</header>
+  <!-- Nav -->
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo"><span>&gt;_&lt;</span> termcute</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#comparison">Compare</a></li>
+        <li><a href="#themes">Themes</a></li>
+        <li><a href="#cli">CLI</a></li>
+        <li>
+          <a href="https://github.com/vishalx0707/termcute" target="_blank" rel="noopener" class="nav-github">
+            <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-<main class="wrap">
-
-  <div class="hero">
-    <div class="kaomoji">&gt;_&lt;</div>
-    <h1>your terminal,<br>but <em>cute</em>.</h1>
-    <p class="tagline">A heavily animated CLI for Windows Terminal. Live-previewed themes,
-    custom wallpapers, generated palettes — and <code>termcute restore</code> when you change your mind.</p>
-
-    <div class="term" role="img" aria-label="Animated demo of termcute commands">
-      <div class="term-bar">
-        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-        <span class="title">windows-terminal — termcute</span>
+  <!-- Hero -->
+  <section class="hero section" id="hero">
+    <div class="container">
+      <div class="fade-in">
+        <p class="hero-symbol">&gt;_&lt;</p>
+        <h1>TermCute</h1>
+        <p class="hero-tagline">
+          An animated CLI that themes Windows Terminal in real time with safe backups.
+        </p>
       </div>
-      <div class="term-body" id="typed"></div>
-    </div>
 
-    <div class="install">
-      <button class="copy" id="copyBtn" aria-label="Copy install command">
-        <span><span class="dollar">$</span> npm install -g termcute</span>
-        <span class="hint" id="copyHint">click to copy</span>
-      </button>
-    </div>
-  </div>
+      <div class="fade-in" style="transition-delay: 0.1s;">
+        <div class="install-block" id="installBlock" role="button" tabindex="0" aria-label="Copy install command to clipboard">
+          <span class="install-prompt">$</span>
+          <span class="install-cmd">npm install -g termcute</span>
+          <span class="install-cursor" aria-hidden="true"></span>
+          <button class="install-copy" aria-label="Copy to clipboard" title="Copy to clipboard">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"/><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"/></svg>
+          </button>
+        </div>
+      </div>
 
-  <section id="features">
-    <div class="eyebrow">what it does</div>
-    <h2>Everything your terminal was missing</h2>
-    <div class="grid">
-      <div class="card"><h3><span class="k">01</span> Browse Themes</h3><p>Preview built-in themes live in your real terminal. Arrow through them; what you see is what you apply.</p></div>
-      <div class="card"><h3><span class="k">02</span> Custom Theme</h3><p>Pick one accent color. TermCute generates a full cohesive palette and previews it before touching anything.</p></div>
-      <div class="card"><h3><span class="k">03</span> Custom Image</h3><p>A file, a path, or straight from your clipboard — normalized and fitted before it ever hits your settings.</p></div>
-      <div class="card"><h3><span class="k">04</span> Restore Defaults</h3><p>One command returns your byte-identical original setup. Regret is a supported feature.</p></div>
+      <div class="hero-buttons fade-in" style="transition-delay: 0.2s;">
+        <a href="https://github.com/vishalx0707/termcute" target="_blank" rel="noopener" class="btn btn-primary">
+          <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          View on GitHub
+        </a>
+        <a href="https://www.npmjs.com/package/termcute" target="_blank" rel="noopener" class="btn btn-secondary">
+          npm &rarr;
+        </a>
+      </div>
+
+      <div class="hero-meta fade-in" style="transition-delay: 0.3s; margin-top: 24px;">
+        <span style="font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted);">
+          v1.0.2 &nbsp;&middot;&nbsp; MIT License &nbsp;&middot;&nbsp; Zero dependencies
+        </span>
+      </div>
+
+      <!-- Video Demo Showcase -->
+      <div class="video-showcase-wrapper fade-in" style="transition-delay: 0.4s; margin-top: 40px;">
+        <div class="video-showcase-header">
+          <div class="video-dots">
+            <span class="video-dot dot-red"></span>
+            <span class="video-dot dot-yellow"></span>
+            <span class="video-dot dot-green"></span>
+            <span class="video-header-title">termcute — interactive session</span>
+          </div>
+          <div class="video-mode-toggles">
+            <button id="btnZoomVideo" class="video-toggle-btn active" title="Curated zoom-in and pan cuts on active actions">Zoomed</button>
+            <button id="btnFullVideo" class="video-toggle-btn" title="Full overview of the terminal window">Full Window</button>
+          </div>
+        </div>
+        <div class="video-player-container">
+          <video id="termcuteVideo" class="video-element" autoplay loop muted playsinline controls preload="metadata">
+            <source id="videoSource" src="termcute-demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="video-badge-overlay">
+            <span class="video-live-indicator"></span> LIVE DEMO
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section id="themes">
-    <div class="eyebrow">built-in themes</div>
-    <h2>Eleven moods, zero dependencies</h2>
-    <p class="lede">Click one to preview how this page would wear it — every swatch is pulled from the real theme files shipped with the CLI.</p>
-    <div class="swatches" id="swatches"></div>
-  </section>
+  <!-- Visual Showcase / Screenshots Section -->
+  <section class="gallery-section section" id="features">
+    <div class="container">
+      <div class="fade-in text-center">
+        <p class="section-label">Interactive CLI</p>
+        <h2 class="section-title">Built for simplicity and speed</h2>
+        <p class="section-desc" style="margin: 0 auto;">Type <code class="inline-code">termcute</code> to launch a lightweight keyboard-driven interface.</p>
+      </div>
 
-  <section id="cli">
-    <div class="eyebrow">cli</div>
-    <h2>Small surface, sharp edges</h2>
-    <div class="cmds">
-      <table>
-        <tr><td>termcute</td><td>animated interactive picker</td></tr>
-        <tr><td>termcute list</td><td>list every built-in theme</td></tr>
-        <tr><td>termcute apply &lt;slug&gt;</td><td>apply a theme permanently</td></tr>
-        <tr><td>termcute custom-image &lt;path&gt;</td><td>set a wallpaper (--fit smart|crop|pad, or --clipboard)</td></tr>
-        <tr><td>termcute restore</td><td>restore your original Windows Terminal settings</td></tr>
-      </table>
+      <!-- Artistic Dynamic Showcase Canvas -->
+      <div class="mosaic-gallery fade-in" style="transition-delay: 0.2s;">
+        
+        <!-- Shot 1: The Iconic Animated Logo Intro -->
+        <div class="mosaic-card mosaic-card-1">
+          <div class="mosaic-card-header">
+            <div class="card-dots">
+              <span class="card-dot dot-red"></span>
+              <span class="card-dot dot-yellow"></span>
+              <span class="card-dot dot-green"></span>
+            </div>
+            <span class="mosaic-tag">01. Startup • ASCII Intro</span>
+          </div>
+          <div class="mosaic-card-media">
+            <img src="shot_1_intro.png" alt="TermCute Startup Animated ASCII Art Logo" loading="lazy">
+          </div>
+        </div>
+
+        <!-- Shot 2: Main Menu Navigation -->
+        <div class="mosaic-card mosaic-card-2">
+          <div class="mosaic-card-header">
+            <div class="card-dots">
+              <span class="card-dot dot-red"></span>
+              <span class="card-dot dot-yellow"></span>
+              <span class="card-dot dot-green"></span>
+            </div>
+            <span class="mosaic-tag">02. Interactive Menu</span>
+          </div>
+          <div class="mosaic-card-media">
+            <img src="shot_2_menu.png" alt="Interactive Menu Picker" loading="lazy">
+          </div>
+        </div>
+
+        <!-- Shot 3: Retro Amber Theme -->
+        <div class="mosaic-card mosaic-card-3">
+          <div class="mosaic-card-header">
+            <div class="card-dots">
+              <span class="card-dot dot-red"></span>
+              <span class="card-dot dot-yellow"></span>
+              <span class="card-dot dot-green"></span>
+            </div>
+            <span class="mosaic-tag">03. Retro Amber</span>
+          </div>
+          <div class="mosaic-card-media">
+            <img src="shot_3_crt.png" alt="Retro Amber Theme Preview" loading="lazy">
+          </div>
+        </div>
+
+        <!-- Shot 4: Vaporwave Neon Cyberpunk Theme -->
+        <div class="mosaic-card mosaic-card-4">
+          <div class="mosaic-card-header">
+            <div class="card-dots">
+              <span class="card-dot dot-red"></span>
+              <span class="card-dot dot-yellow"></span>
+              <span class="card-dot dot-green"></span>
+            </div>
+            <span class="mosaic-tag">04. Neon Cyberpunk HUD</span>
+          </div>
+          <div class="mosaic-card-media">
+            <img src="shot_4_cyberpunk.png" alt="Cyberpunk Neon Theme" loading="lazy">
+          </div>
+        </div>
+
+        <!-- Shot 5: Custom Image, Clipboard Paste & Opacity Sliders -->
+        <div class="mosaic-card mosaic-card-5">
+          <div class="mosaic-card-header">
+            <div class="card-dots">
+              <span class="card-dot dot-red"></span>
+              <span class="card-dot dot-yellow"></span>
+              <span class="card-dot dot-green"></span>
+            </div>
+            <span class="mosaic-tag">05. Live Image Preview & Sliders</span>
+          </div>
+          <div class="mosaic-card-media">
+            <img src="shot_5_custom_image.png" alt="Custom Image & Opacity Controls" loading="lazy">
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
-  <section id="safety">
-    <div class="eyebrow">safety</div>
-    <h2>It writes carefully</h2>
-    <div class="safety">
-      <div><b>Backups first</b>Your untouched settings are saved as <code>settings.termcute-original.json</code> before the first change — and never overwritten.</div>
-      <div><b>Atomic writes</b>Settings files are written atomically, so a crash mid-write can't corrupt your terminal config.</div>
-      <div><b>Esc is undo</b>Live preview reverts itself on Esc, Ctrl+C, or any crash. Nothing sticks until you say so.</div>
+  <!-- Before & After Comparison -->
+  <section class="comparison section" id="comparison">
+    <div class="container">
+      <div class="fade-in">
+        <p class="section-label">Transformation</p>
+        <h2 class="section-title">Before & after TermCute</h2>
+        <p class="section-desc">From a sterile, black window to an expressive, aesthetic workspace.</p>
+      </div>
+
+      <!-- Pure Cinematic Terminal Window -->
+      <div class="cinematic-showcase fade-in">
+        <div class="cinematic-window">
+          <!-- Window Titlebar -->
+          <div class="cinematic-titlebar">
+            <div class="cinematic-dots">
+              <span class="c-dot dot-red"></span>
+              <span class="c-dot dot-yellow"></span>
+              <span class="c-dot dot-green"></span>
+            </div>
+            <span class="cinematic-status-pill" id="cinematicStateBadge">Before TermCute</span>
+          </div>
+
+          <!-- Video-like Screen Transition Container -->
+          <div class="cinematic-screen">
+            <img src="before_termcute.png" alt="Terminal Before TermCute" class="cine-frame frame-before active" id="frameBefore">
+            <img src="after_termcute.png" alt="Terminal After TermCute" class="cine-frame frame-after" id="frameAfter">
+            
+            <div class="cine-overlay-indicator">
+              <div class="cine-progress-track">
+                <div class="cine-progress-bar" id="cineProgressBar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <footer>
-    <span>made with <span class="love">&lt;3</span> for Windows Terminal</span>
-    <a href="https://github.com/vishalx0707/termcute">github</a>
-    <a href="https://www.npmjs.com/package/termcute">npm</a>
-    <span>Node 18+ · Windows Terminal</span>
+  <!-- Themes -->
+  <section class="themes section" id="themes">
+    <div class="container">
+      <div class="fade-in">
+        <p class="section-label">Themes</p>
+        <h2 class="section-title">11 curated colorschemes</h2>
+        <p class="section-desc">Arrow through them in the animated picker. Your terminal transforms in real-time.</p>
+      </div>
+
+      <div class="themes-grid" id="themesGrid">
+        <!-- JS will inject theme cards -->
+      </div>
+    </div>
+  </section>
+
+  <!-- CLI -->
+  <section class="cli section" id="cli">
+    <div class="container">
+      <div class="fade-in">
+        <p class="section-label">CLI</p>
+        <h2 class="section-title">Simple commands</h2>
+        <p class="section-desc">Run <code style="color: var(--mint);">termcute</code> for the animated picker, or use subcommands for scripted use.</p>
+      </div>
+
+      <div class="cli-block fade-in">
+        <div class="cli-header">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span>terminal</span>
+        </div>
+        <div class="cli-body">
+          <pre><span class="cli-cmd">termcute</span>                              <span class="cli-comment"># animated picker</span>
+<span class="cli-cmd">termcute</span> <span class="cli-arg">list</span>                         <span class="cli-comment"># list built-in themes</span>
+<span class="cli-cmd">termcute</span> <span class="cli-arg">apply</span> &lt;slug&gt;                 <span class="cli-comment"># apply a theme permanently</span>
+<span class="cli-cmd">termcute</span> <span class="cli-arg">custom-image</span> &lt;path&gt;         <span class="cli-comment"># normalize and apply image</span>
+<span class="cli-cmd">termcute</span> <span class="cli-arg">custom-image</span> --clipboard    <span class="cli-comment"># paste from clipboard</span>
+<span class="cli-cmd">termcute</span> <span class="cli-arg">restore</span>                      <span class="cli-comment"># restore original settings</span></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <span>&gt;_&lt;</span> termcute &middot; MIT License
+      </div>
+      <ul class="footer-links">
+        <li><a href="https://github.com/vishalx0707/termcute" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.npmjs.com/package/termcute" target="_blank" rel="noopener">npm</a></li>
+        <li><a href="https://github.com/vishalx0707/termcute/issues" target="_blank" rel="noopener">Issues</a></li>
+      </ul>
+    </div>
   </footer>
 
-</main>
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite">Copied to clipboard ✓</div>
 
-<script>
-// ---- typed terminal demo ----
-const LINES = [
-  { c: "termcute list", o: ["  ocean · matcha · amoled · retro-crt · +7 more"] },
-  { c: "termcute apply ocean", o: ["  previewing… looks good? [Y/n] y", "  ✓ applied — backup kept at settings.termcute-original.json"] },
-  { c: "termcute restore", o: ["  ✓ original settings restored. no hard feelings <3"] },
-];
-const body = document.getElementById("typed");
-const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  <script>
+    /* ===== THEME DATA ===== */
+    const themes = [
+      {
+        name: 'Retro CRT',
+        slug: 'retro-crt',
+        desc: 'Green phosphor terminal — 1982 called, it looks great',
+        bg: '#041204',
+        fg: '#33ff66',
+        colors: ['#5cff8a', '#33ff66', '#a8ff5c', '#2be6a3', '#7dffb0', '#4dffcf'],
+        badge: 'scanlines',
+      },
+      {
+        name: 'Retro Amber',
+        slug: 'retro-amber',
+        desc: 'Monochrome amber phosphor — glowing amber scanlines',
+        bg: '#120a02',
+        fg: '#ffb010',
+        colors: ['#ffb010', '#ffd050', '#ffa000', '#ffc030', '#ffa040', '#ffb010'],
+        badge: 'scanlines',
+      },
+      {
+        name: 'Retro Commodore',
+        slug: 'retro-commodore',
+        desc: 'Commodore 64 console — classic 80s blue screen',
+        bg: '#3a3ade',
+        fg: '#a2a2ff',
+        colors: ['#e05050', '#50e050', '#e0e050', '#3a3ade', '#e050e0', '#50e0e0'],
+        badge: 'scanlines',
+      },
+      {
+        name: 'Retro Pip-Boy',
+        slug: 'retro-pipboy',
+        desc: 'Fallout Pip-Boy — radioactive green phosphors',
+        bg: '#041808',
+        fg: '#00ff66',
+        colors: ['#33ff66', '#00ff66', '#85ff9c', '#1eff8a', '#5cffa5', '#33ff99'],
+        badge: 'scanlines',
+      },
+      {
+        name: 'Retro Cyberpunk',
+        slug: 'retro-cyberpunk',
+        desc: 'Vaporwave HUD — hot neon magenta scanlines',
+        bg: '#16020c',
+        fg: '#ff007f',
+        colors: ['#ff007f', '#ff54a2', '#ff7aba', '#ff00a0', '#e00070', '#ff3ca8'],
+        badge: 'scanlines',
+      },
+      {
+        name: 'Liquid Glass',
+        slug: 'liquid-glass',
+        desc: 'Apple-style frosted glass — your desktop glows through',
+        bg: '#1a1a2e',
+        fg: '#e8edf5',
+        colors: ['#ff6b8a', '#6be8b0', '#f5d87a', '#6aadff', '#a68dff', '#6adce0'],
+        badge: 'acrylic 30%',
+      },
+      {
+        name: 'Notes',
+        slug: 'notes',
+        desc: 'Ruled notebook paper — blue lines, red margin, ink text',
+        bg: '#f8f4e9',
+        fg: '#33415c',
+        colors: ['#c9485b', '#3e7d54', '#a8720e', '#33628f', '#7d4fa0', '#257d7d'],
+        badge: 'light',
+      },
+      {
+        name: 'Ocean',
+        slug: 'ocean',
+        desc: 'Deep water — teal currents over navy depths',
+        bg: '#0a1b2a',
+        fg: '#dcebf5',
+        colors: ['#f2708a', '#66d9b8', '#f0cf87', '#5aa7e0', '#9d8ce0', '#5ecbe8'],
+      },
+      {
+        name: 'Matcha',
+        slug: 'matcha',
+        desc: 'Green tea and cream — earthy, warm, and calm',
+        bg: '#1c221b',
+        fg: '#e7edde',
+        colors: ['#d98e73', '#a3c585', '#e4d08a', '#7fa8b8', '#b39cc0', '#8fbcab'],
+      },
+      {
+        name: 'Minimal',
+        slug: 'minimal',
+        desc: 'Quiet monochrome — muted tones, zero noise',
+        bg: '#101010',
+        fg: '#d6d6d6',
+        colors: ['#c98a8a', '#9dbd9d', '#cdc09a', '#93a8c0', '#af9dbd', '#96b8b4'],
+      },
+      {
+        name: 'AMOLED',
+        slug: 'amoled',
+        desc: 'True black, pixels off — vivid color on the void',
+        bg: '#000000',
+        fg: '#f2f2f2',
+        colors: ['#ff3b5c', '#2bff88', '#ffd60a', '#3b82ff', '#c77dff', '#2be4f0'],
+      },
+    ];
 
-function render(lines, withCursor) {
-  body.innerHTML = lines.map(l =>
-    `<div><span class="p">❯</span> <span class="c">${l.c}</span></div>` +
-    l.o.map(o => `<div class="out">${o}</div>`).join("")
-  ).join("") + (withCursor ? `<span class="p">❯</span> <span class="cursor"></span>` : "");
-}
+    /* ===== RENDER THEMES ===== */
+    const grid = document.getElementById('themesGrid');
 
-function typeLines() {
-  const done = [];
-  let li = 0;
-  function typeCmd(cmd, ci) {
-    if (ci <= cmd.length) {
-      render([...done, { c: cmd.slice(0, ci), o: [] }], true);
-      setTimeout(() => typeCmd(cmd, ci + 1), 34 + Math.random() * 46);
-    } else {
-      let oi = 0;
-      (function showOut() {
-        if (oi < LINES[li].o.length) {
-          render([...done, { c: cmd, o: LINES[li].o.slice(0, ++oi) }], false);
-          setTimeout(showOut, 420);
-        } else {
-          done.push({ c: cmd, o: LINES[li].o });
-          if (++li < LINES.length) setTimeout(() => typeCmd(LINES[li].c, 0), 700);
-          else setTimeout(() => { body.innerHTML = ""; typeLines(); }, 3200);
-        }
-      })();
+    const termLines = [
+      ['~', 'cd projects/termcute'],
+      ['~/projects/termcute', 'npm start'],
+      ['', '> _< TERMCUTE v1.0.2'],
+    ];
+
+    themes.forEach((t, i) => {
+      const card = document.createElement('div');
+      card.className = 'theme-card fade-in';
+      card.style.transitionDelay = `${i * 0.04}s`;
+
+      const dotColors = t.colors.slice(0, 3);
+      const swatches = t.colors.map(c => `<div class="theme-swatch" style="background:${c}"></div>`).join('');
+
+      const lines = termLines.map(([dir, cmd]) => {
+        const prompt = dir ? `<span style="color:${t.colors[1]}">${dir}</span><span style="color:${t.fg}"> $ </span>` : '';
+        const cmdColor = dir ? t.fg : t.colors[3];
+        return `<span class="line">${prompt}<span style="color:${cmdColor}">${cmd}</span></span>`;
+      }).join('');
+
+      card.innerHTML = `
+        <div class="theme-preview">
+          <div class="theme-titlebar">
+            <div class="theme-dot" style="background:${dotColors[0]}"></div>
+            <div class="theme-dot" style="background:${dotColors[1]}"></div>
+            <div class="theme-dot" style="background:${dotColors[2]}"></div>
+            <span class="theme-titlebar-label">${t.slug}</span>
+          </div>
+          <div class="theme-terminal" style="background:${t.bg}; color:${t.fg}">
+            ${lines}
+            <div class="theme-swatches">${swatches}</div>
+          </div>
+        </div>
+        <div class="theme-info">
+          <div class="theme-name">${t.name}</div>
+          <div class="theme-desc">${t.desc}</div>
+          ${t.badge ? `<span class="theme-badge">${t.badge}</span>` : ''}
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    /* ===== COPY TO CLIPBOARD ===== */
+    const installBlock = document.getElementById('installBlock');
+    const toast = document.getElementById('toast');
+
+    function copyInstall() {
+      navigator.clipboard.writeText('npm install -g termcute').then(() => {
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      });
     }
-  }
-  if (reduced) { render(LINES, true); return; }
-  typeCmd(LINES[0].c, 0);
-}
-typeLines();
 
-// ---- theme swatches (fetched from real theme files at build time — inlined below) ----
-const THEMES = [
-  ["ocean","#0a1b2a","#5ecbe8"],["matcha","#1c221b","#a3c585"],["amoled","#000000","#ffffff"],
-  ["liquid-glass","#1a1a2e","#8ab4ff"],["minimal","#101010","#d6d6d6"],["notes","#f8f4e9","#c9485b"],
-  ["retro-amber","#120a02","#ffb010"],["retro-commodore","#3a3ade","#a2a2ff"],
-  ["retro-crt","#041204","#33ff66"],["retro-cyberpunk","#16020c","#ff007f"],["retro-pipboy","#041808","#00ff66"]
-];
-const sw = document.getElementById("swatches");
-THEMES.forEach(([slug, bg, accent], i) => {
-  const b = document.createElement("button");
-  b.className = "swatch";
-  b.innerHTML = `<div class="chip" style="background:${bg};color:${accent}">❯ termcute</div><div class="nm">${slug}</div><div class="hx">${bg}</div>`;
-  b.addEventListener("click", () => {
-    const r = document.documentElement.style;
-    r.setProperty("--bg", bg);
-    r.setProperty("--bg-deep", bg);
-    r.setProperty("--surface", bg);
-    r.setProperty("--line", accent + "44");
-    r.setProperty("--fg", i === 5 ? "#33415c" : "#dcebf5");
-    r.setProperty("--muted", i === 5 ? "#7a8aa5" : "#6f93ab");
-    r.setProperty("--cyan", accent);
-  });
-  sw.appendChild(b);
-});
+    installBlock.addEventListener('click', copyInstall);
+    installBlock.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        copyInstall();
+      }
+    });
 
-// ---- copy button ----
-const btn = document.getElementById("copyBtn"), hint = document.getElementById("copyHint");
-btn.addEventListener("click", () => {
-  navigator.clipboard?.writeText("npm install -g termcute").catch(() => {});
-  hint.textContent = "copied ✓";
-  btn.classList.add("copied");
-  setTimeout(() => { hint.textContent = "click to copy"; btn.classList.remove("copied"); }, 1800);
-});
-</script>
+    /* ===== VIDEO MODE TOGGLES ===== */
+    const termVideo = document.getElementById('termcuteVideo');
+    const videoSource = document.getElementById('videoSource');
+    const btnZoom = document.getElementById('btnZoomVideo');
+    const btnFull = document.getElementById('btnFullVideo');
+
+    if (btnZoom && btnFull && termVideo && videoSource) {
+      function switchVideoMode(src, activeBtn, inactiveBtn) {
+        const currentTime = termVideo.currentTime;
+        videoSource.src = src;
+        termVideo.load();
+        termVideo.currentTime = currentTime;
+        termVideo.play().catch(() => {});
+        activeBtn.classList.add('active');
+        inactiveBtn.classList.remove('active');
+      }
+
+      btnZoom.addEventListener('click', () => switchVideoMode('termcute-demo.mp4', btnZoom, btnFull));
+      btnFull.addEventListener('click', () => switchVideoMode('termcute-showcase.mp4', btnFull, btnZoom));
+    }
+
+    /* ===== CINEMATIC BEFORE & AFTER TRANSFORMATION ===== */
+    const frameBefore = document.getElementById('frameBefore');
+    const frameAfter = document.getElementById('frameAfter');
+    const badge = document.getElementById('cinematicStateBadge');
+    const progressBar = document.getElementById('cineProgressBar');
+
+    if (frameBefore && frameAfter && badge) {
+      let isShowingAfter = false;
+      let progress = 0;
+
+      function toggleFrame() {
+        isShowingAfter = !isShowingAfter;
+        if (isShowingAfter) {
+          frameBefore.classList.remove('active');
+          frameAfter.classList.add('active');
+          badge.textContent = 'After TermCute';
+          badge.classList.add('is-after');
+        } else {
+          frameAfter.classList.remove('active');
+          frameBefore.classList.add('active');
+          badge.textContent = 'Before TermCute';
+          badge.classList.remove('is-after');
+        }
+      }
+
+      // Smooth progress bar update and cinematic crossfade loop
+      setInterval(() => {
+        progress += 0.8;
+        if (progress >= 100) {
+          progress = 0;
+          toggleFrame();
+        }
+        if (progressBar) {
+          progressBar.style.width = `${progress}%`;
+        }
+      }, 40);
+    }
+
+    /* ===== INTERSECTION OBSERVER FADE-IN ===== */
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+  </script>
 </body>
 </html>
